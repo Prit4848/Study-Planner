@@ -1,0 +1,75 @@
+<%- include('./partials/header') %>
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-bold mb-4">Edit Study Plan: <%= plan.title %></h2>
+    <form action="/plan/<%= plan._id %>/<%= plan.userId %>/edit" method="POST" class="mt-4 bg-white p-6 rounded-lg shadow-md">
+        <div class="mb-4">
+            <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
+            <input type="text" name="title" id="title" class="input border border-gray-300 p-2 w-full rounded-md" value="<%= plan.title %>" required>
+        </div>
+        <div class="mb-4">
+            <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
+            <textarea name="description" id="description" class="input border border-gray-300 p-2 w-full rounded-md"><%= plan.description %></textarea>
+        </div>
+        <div class="mb-4">
+            <label for="date" class="block text-gray-700 font-medium mb-2">Date</label>
+            <input type="date" name="date" id="date" class="input border border-gray-300 p-2 w-full rounded-md" value="<%= plan.date.toISOString().substr(0, 10) %>" required>
+        </div>
+        <div class="mb-4">
+            <h3 class="text-xl font-semibold mb-2">Tasks</h3>
+            <div id="tasks">
+                <% plan.tasks.forEach((task, index) => { %>
+                <div class="task mb-4 p-4 bg-gray-100 rounded-lg">
+                    <div class="mb-2">
+                        <label for="tasks[<%= index %>][startTime]" class="block text-gray-700">Start Time</label>
+                        <input type="time" name="tasks[<%= index %>][startTime]" class="input border border-gray-300 p-2 w-full rounded-md" value="<%= task.startTime %>" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="tasks[<%= index %>][endTime]" class="block text-gray-700">End Time</label>
+                        <input type="time" name="tasks[<%= index %>][endTime]" class="input border border-gray-300 p-2 w-full rounded-md" value="<%= task.endTime %>" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="tasks[<%= index %>][title]" class="block text-gray-700">Task Title</label>
+                        <input type="text" name="tasks[<%= index %>][title]" class="input border border-gray-300 p-2 w-full rounded-md" value="<%= task.title %>" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="tasks[<%= index %>][description]" class="block text-gray-700">Task Description</label>
+                        <textarea name="tasks[<%= index %>][description]" class="input border border-gray-300 p-2 w-full rounded-md"><%= task.description %></textarea>
+                    </div>
+                </div>
+                <% }) %>
+            </div>
+            <button type="button" id="addTask" class="btn-secondary bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Add Another Task</button>
+        </div>
+        <button type="submit" class="btn-primary bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out">Save Changes</button>
+    </form>
+</div>
+
+<script>
+document.getElementById('addTask').addEventListener('click', function () {
+    const tasksContainer = document.getElementById('tasks');
+    const taskCount = tasksContainer.children.length;
+    const newTask = document.createElement('div');
+    newTask.classList.add('task', 'mb-4', 'p-4', 'bg-gray-100', 'rounded-lg');
+    newTask.innerHTML = `
+        <div class="mb-2">
+            <label for="tasks[${taskCount}][startTime]" class="block text-gray-700">Start Time</label>
+            <input type="time" name="tasks[${taskCount}][startTime]" class="input border border-gray-300 p-2 w-full rounded-md" required>
+        </div>
+        <div class="mb-2">
+            <label for="tasks[${taskCount}][endTime]" class="block text-gray-700">End Time</label>
+            <input type="time" name="tasks[${taskCount}][endTime]" class="input border border-gray-300 p-2 w-full rounded-md" required>
+        </div>
+        <div class="mb-2">
+            <label for="tasks[${taskCount}][title]" class="block text-gray-700">Task Title</label>
+            <input type="text" name="tasks[${taskCount}][title]" class="input border border-gray-300 p-2 w-full rounded-md" required>
+        </div>
+        <div class="mb-2">
+            <label for="tasks[${taskCount}][description]" class="block text-gray-700">Task Description</label>
+            <textarea name="tasks[${taskCount}][description]" class="input border border-gray-300 p-2 w-full rounded-md"></textarea>
+        </div>
+    `;
+    tasksContainer.appendChild(newTask);
+});
+</script>
+
+<%- include('./partials/footer') %>
