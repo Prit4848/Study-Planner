@@ -3,6 +3,7 @@ const planModel = require("../models/plan-model")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils/generateTokens");
+const isLoggedin = require("../middleware/isLoggedin")
 
 module.exports.registerUser = async function (req, res) {
   try {
@@ -71,4 +72,40 @@ module.exports.getloginUser = function(req,res){
   let {email} =req.body;
   let user =  userModel.findOne({email:email})
   res.render("login",{user})
+}
+
+module.exports.uploadProfileImage = async function(req,res){
+  try {
+    let user = await userModel.findOneAndUpdate(
+      { _id: req.params.userid },
+      { image: req.file.buffer },
+      { new: true }
+    );
+
+    await user.save();
+    res.redirect(`/Account/${user._id}`);
+  } catch (err) {
+    res.send(err.message);
+  }
+}
+
+module.exports.AccountUpdate = async function(req,res){
+  let {username,email,Phone_no,Bio,password}= req.body;
+  bcrypt.genSalt(12, function (err, salt) {
+    bcrypt.hash(password, salt, async function (err, hash) {
+      if (err) return res.send(err.message);
+      else {
+        let user = await userModel.findOneAndUpdate({
+          Bio,
+          username,
+          email,
+          Phone_no,
+          password: hash,
+        });
+
+        await user.save();
+        res.redirect(`/Account/${user._id}`);
+      }
+    });
+  });
 }

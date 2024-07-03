@@ -14,6 +14,11 @@ const userSchema = mongoose.Schema({
         unique: true,
         trim: true
       },
+      phone_no:{
+        type: Number,
+        unique: true,
+        trim: true
+      },
       password: {
         type: String,
         required: true
@@ -25,7 +30,12 @@ const userSchema = mongoose.Schema({
       image:{
       type:  Buffer,
       require:true
-      }
+      },
+      Background_image:{
+        type:  Buffer,
+        require:true
+        },
+      Bio:String,
 })
 
 module.exports = mongoose.model("user",userSchema)

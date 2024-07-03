@@ -8,6 +8,21 @@
     </div>
   </div>
 </footer>
-  
+  <script>
+    function toggleDropdown() {
+    const dropdown = document.getElementById('user-dropdown');
+    dropdown.classList.toggle('hidden');
+  }
+
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(event) {
+    if (!event.target.closest('#user-menu-button')) {
+      const dropdown = document.getElementById('user-dropdown');
+      if (!dropdown.classList.contains('hidden')) {
+        dropdown.classList.add('hidden');
+      }
+    }
+  }
+  </script>
 </body>
 </html>

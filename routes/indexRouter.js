@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const isLoggedIn = require("../middleware/isLoggedin")
+const isloggedin = require("../middleware/isLoggedin")
 const planModel = require("../models/plan-model")
 const userModel = require("../models/user-model")
 
@@ -9,11 +9,11 @@ router.get("/",async function(req,res){
     let { email } = req.body;
     let error = req.flash("error");
     let user = await userModel.findOne({email:email})
-    res.render("index",{ user,error });
+    res.render("index",{ user,error,isloggedin:false });
     // res.send("hello brother")
 })
 
-router.get("/dashboard", isLoggedIn,async function (req, res) {
+router.get("/dashboard", isloggedin,async function (req, res) {
     try {
         let plan = await planModel.find({ userId: req.user._id }); 
         res.render("dashbord", { user: req.user, plan });
@@ -23,5 +23,18 @@ router.get("/dashboard", isLoggedIn,async function (req, res) {
     }
 });
 
+router.get("/Account/:userid",isloggedin,async function(req,res){
+   let user = await userModel.findOne({_id:req.params.userid})
+    res.render("Account",{user})
+})
+
+router.get("/Profile/:userid",isloggedin,async function(req,res){
+    try{let plan = await planModel.find({userId:req.user._id})
+    res.render("profile",{user:req.user,plan})
+}catch(err){
+    res.send(err.message)
+    console.log(err)
+}
+})
 
 module.exports = router;

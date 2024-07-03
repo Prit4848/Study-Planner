@@ -11,6 +11,7 @@ require('dotenv').config();
 const db = require("./config/mongoose-connection")
 const userRoutes = require("./routes/userRouters")
 const planRoutes = require("./routes/planRouters")
+const goalRouter = require("./routes/goalRouter")
 const indexRouter = require("./routes/indexRouter")
 
 require('dotenv').config();
@@ -31,6 +32,7 @@ app.use(express.static('public'));
 
 app.use('/user', userRoutes);
 app.use('/plan', planRoutes);
+app.use('/goal', goalRouter)
 app.use('/',indexRouter);
 
 app.listen(3000,()=>{
