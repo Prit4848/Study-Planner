@@ -46,7 +46,7 @@ module.exports.loginUser = async function (req, res) {
         let token = generateToken(user);
         res.cookie("token", token);
         let plan = await planModel.find({ userId: user._id });
-       res.render("dashbord",{user,plan})
+       res.redirect("/dashboard")
       } else {
         res.send("email or password are incorect !!");
       }

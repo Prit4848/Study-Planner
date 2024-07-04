@@ -3,6 +3,7 @@ const router = express.Router();
 const isloggedin = require("../middleware/isLoggedin")
 const planModel = require("../models/plan-model")
 const userModel = require("../models/user-model")
+const goalModel = require("../models/goal-model")
 
 
 router.get("/",async function(req,res){
@@ -16,7 +17,10 @@ router.get("/",async function(req,res){
 router.get("/dashboard", isloggedin,async function (req, res) {
     try {
         let plan = await planModel.find({ userId: req.user._id }); 
-        res.render("dashbord", { user: req.user, plan });
+
+        let goal = await goalModel.find({userId:req.user._id})
+
+        res.render("dashbord", { user: req.user, plan,goal });
     } catch (err) {
         console.error(err);
         res.status(500).send("Internal server error");
@@ -29,8 +33,10 @@ router.get("/Account/:userid",isloggedin,async function(req,res){
 })
 
 router.get("/Profile/:userid",isloggedin,async function(req,res){
-    try{let plan = await planModel.find({userId:req.user._id})
-    res.render("profile",{user:req.user,plan})
+    try{
+        let plan = await planModel.find({userId:req.user._id})
+        let goal = await goalModel.find({userId:req.user._id})
+        res.render("profile",{user:req.user,plan,goal})
 }catch(err){
     res.send(err.message)
     console.log(err)

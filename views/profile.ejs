@@ -46,18 +46,12 @@
           </ul>
           <h2 class="text-2xl font-bold mb-2">Goals</h2>
           <ul class="list-none mb-4">
-            <li class="mb-2">
-              <i class="fas fa-target text-gray-600 mr-2"></i>
-              Complete online course
-            </li>
-            <li class="mb-2">
-              <i class="fas fa-target text-gray-600 mr-2"></i>
-              Learn a new programming language
-            </li>
-            <li class="mb-2">
-              <i class="fas fa-target text-gray-600 mr-2"></i>
-              Build a personal project
-            </li>
+            <% goal.reverse().forEach(goals=>{ %>
+              <li class="mb-2">
+                <i class="fas fa-target text-gray-600 mr-2"></i>
+                <%= goals.goalTitle %>
+              </li>
+           <% }) %>
           </ul>
         </div>
       </div>
