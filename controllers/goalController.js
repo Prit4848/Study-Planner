@@ -24,3 +24,47 @@ module.exports.createGoal = async function (req, res) {
     console.log(err);
   }
 };
+
+module.exports.viewGoal = async function(req,res){
+  try{
+    let goal = await goalModel.findOne({_id:req.params.goalid,userId:req.params.userid})
+
+    res.render("viewGoal",{goal})
+  }catch(err){
+    res.send("err.message")
+  }
+}
+
+module.exports.editGoal = async function(req,res){
+  try{
+    let goal = await goalModel.findOne({_id:req.params.goalid,userId:req.params.userid})
+
+    res.render("editGoal",{goal})
+  }catch(err){
+    res.send("err.message")
+  }
+}
+
+module.exports.postEditGoal = async function(req,res){
+  try{
+      let {goalTitle, goalDescription, dueDate, priority} = req.body;
+
+      let goal = await goalModel.findOneAndUpdate({_id:req.params.goalid,userId:req.params.userid},{goalTitle, goalDescription, dueDate, priority},{new:true})
+
+      await goal.save();
+
+      res.redirect("/dashboard")
+  }catch(err){
+    res.send(err.message)
+  }
+}
+
+module.exports.deleteGoal = async function(req,res){
+  try{
+       await goalModel.deleteOne({_id:req.params.goalid})
+
+       res.redirect("/dashboard")
+  }catch(err){
+    res.send(err.message)
+  }
+}
