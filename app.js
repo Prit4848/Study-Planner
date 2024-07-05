@@ -27,7 +27,7 @@ app.use(session({
     saveUninitialized: false,
     cookie: { secure: false }
 }));
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.use('/user', userRoutes);

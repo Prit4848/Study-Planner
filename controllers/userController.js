@@ -26,7 +26,8 @@ module.exports.registerUser = async function (req, res) {
           let token = generateToken(user);
           res.cookie("token", token);
           let plan = await planModel.find({ userId: user._id });
-          res.render("dashbord",{user,plan})
+          await user.save()
+          res.redirect("/home")
         }
       });
     });
@@ -46,7 +47,7 @@ module.exports.loginUser = async function (req, res) {
         let token = generateToken(user);
         res.cookie("token", token);
         let plan = await planModel.find({ userId: user._id });
-       res.redirect("/dashboard")
+       res.redirect("/home")
       } else {
         res.send("email or password are incorect !!");
       }
@@ -90,7 +91,7 @@ module.exports.uploadProfileImage = async function(req,res){
 }
 
 module.exports.AccountUpdate = async function(req,res){
-  let {username,email,Phone_no,Bio,password}= req.body;
+  let {username,email,phone_no,Bio,password}= req.body;
   bcrypt.genSalt(12, function (err, salt) {
     bcrypt.hash(password, salt, async function (err, hash) {
       if (err) return res.send(err.message);
@@ -99,7 +100,7 @@ module.exports.AccountUpdate = async function(req,res){
           Bio,
           username,
           email,
-          Phone_no,
+          phone_no,
           password: hash,
         });
 

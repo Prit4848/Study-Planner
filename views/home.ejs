@@ -1,11 +1,6 @@
 <%- include('./partials/header') %>
-<% if(error.length > 0) { %>
-  <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 mb-5">
-    <span class="inline-block mt-1 mb-1 text-white">
-      <%= error %>
-    </span>
-  </div>
-<% } %>
+
+   
 <div class="container mx-auto p-4 relative z-10">
   <h1 class="text-4xl text-center mt-8 text-black">Welcome to Study Planner</h1>
 </div>
@@ -54,9 +49,9 @@
 <div class="container mx-auto p-4 relative z-10">
   <div class="flex justify-center mt-4">
     
-      <a href="/user/register" class="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mr-4 transition duration-300">Register</a>
-      <a href="/user/login" class="bg-gray-300 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md transition duration-300">Login</a>
-   
+      <a href="/dashboard" class="bg-yellow-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md mr-4 transition duration-300">Dashboard</a>
+      <a href="/user/logout" class="bg-red-500 hover:bg-gray-400 text-gray-800 py-2 px-4 rounded-md transition duration-300">Logout</a>
+    
   </div>
 </div>
 

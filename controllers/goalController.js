@@ -29,7 +29,7 @@ module.exports.viewGoal = async function(req,res){
   try{
     let goal = await goalModel.findOne({_id:req.params.goalid,userId:req.params.userid})
 
-    res.render("viewGoal",{goal})
+    res.render("viewGoal",{goal,user:req.user})
   }catch(err){
     res.send("err.message")
   }
@@ -39,7 +39,7 @@ module.exports.editGoal = async function(req,res){
   try{
     let goal = await goalModel.findOne({_id:req.params.goalid,userId:req.params.userid})
 
-    res.render("editGoal",{goal})
+    res.render("editGoal",{goal,user:req.user})
   }catch(err){
     res.send("err.message")
   }
@@ -66,5 +66,18 @@ module.exports.deleteGoal = async function(req,res){
        res.redirect("/dashboard")
   }catch(err){
     res.send(err.message)
+  }
+}
+
+module.exports.completionGoal = async function(req,res){
+  try{
+       let goal = await goalModel.findOne({_id:req.params.goalid})
+       
+        goal.completed = !goal.completed;
+        
+        await goal.save()
+        res.redirect(`/goal/${goal._id}/${goal.userId}/view`)
+  }catch(err){
+    res.send(err.message);
   }
 }

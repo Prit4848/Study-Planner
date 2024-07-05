@@ -13,17 +13,20 @@
                 <p class="text-gray-700 mb-4"><%= goal.goalDescription %></p>
                 <p class="text-sm text-gray-500 mb-2"><strong>Due Date:</strong>  <%= new Date(goal.dueDate).toDateString() %></p>
                 <p class="text-sm text-gray-500 mb-4"><strong>Priority:</strong> <%= goal.priority %></p>
+                <p class="text-sm text-gray-500 mb-4 flex"><strong>Goal:</strong><span class="<%= goal.completed ? 'text-green-500' : 'text-red-500' %> font-bold flex items-center">
+                    <i class="<%= goal.completed ? 'fas fa-check-circle' : 'fas fa-times-circle' %> mr-2"></i>
+                    <%= goal.completed ? 'Completed' : 'Pending' %>
+                  </span></p>
                 <div class="flex items-center space-x-4">
                     <a href="/goal/<%= goal._id %>/<%= goal.userId %>/edit"
                        class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
                         Edit
                     </a>
-                    <form action="/goal/goal.id/complete" method="POST" class="inline">
-                        <button type="submit"
-                                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out">
-                            Mark as Completed
+                    
+                      <form action="/goal/<%= goal._id %>/toggle" method="POST" class="mt-2">
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">
+                          <%= goal.completed ? 'Mark as Pending' : 'Mark as Completed' %>
                         </button>
-                    </form>
                 </div>
             </div>
 

@@ -9,10 +9,14 @@ const goalModel = require("../models/goal-model")
 router.get("/",async function(req,res){
     let { email } = req.body;
     let error = req.flash("error");
-    let user = await userModel.findOne({email:email})
-    res.render("index",{ user,error,isloggedin:false });
+    // let user = await userModel.findOne({email:email})
+    res.render("index",{ error,isloggedin:false });
     // res.send("hello brother")
 })
+ router.get("/home",isloggedin,function(req,res){
+  
+    res.render("home",{user:req.user})
+ })
 
 router.get("/dashboard", isloggedin,async function (req, res) {
     try {
