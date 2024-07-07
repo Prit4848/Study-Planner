@@ -47,4 +47,14 @@ router.get("/Profile/:userid",isloggedin,async function(req,res){
 }
 })
 
+router.get("/planTracker",isloggedin,async function(req,res){
+    try{
+        let plans = await planModel.find({userId:req.user._id})
+       
+        res.render("planTracker",{plans,user:req.user})
+    }catch(err){
+        res.send(err.messege);
+    }
+})
+
 module.exports = router;

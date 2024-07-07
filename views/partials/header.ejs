@@ -6,20 +6,50 @@
     <title>Study Planner</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheets" href="/styleSheets/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      /* Add this to your CSS file */
+         .bio-color-0 { color: #e3342f; } /* red */
+         .bio-color-1 { color: #f6993f; } /* orange */
+         .bio-color-2 { color: #ffed4a; } /* yellow */
+         .bio-color-3 { color: #38c172; } /* green */
+         .bio-color-4 { color: #4dc0b5; } /* teal */
+         .bio-color-5 { color: #3490dc; } /* blue */
+         .bio-color-6 { color: #6574cd; } /* indigo */
+         .bio-color-7 { color: #9561e2; } /* purple */
+         .bio-color-8 { color: #f66d9b; } /* pink */
+         .bio-color-17 { color: #e3342f; } /* red */
+         .bio-color-16 { color: #f6993f; } /* orange */
+         .bio-color-15 { color: #ffed4a; } /* yellow */
+         .bio-color-14 { color: #38c172; } /* green */
+         .bio-color-13 { color: #4dc0b5; } /* teal */
+         .bio-color-12 { color: #3490dc; } /* blue */
+         .bio-color-11 { color: #6574cd; } /* indigo */
+         .bio-color-10 { color: #9561e2; } /* purple */
+         .bio-color-9 { color: #f66d9b; } /* pink */
+
+    </style>
 </head>
 <body class="bg-gray-100">
-  <header class="bg-blue-600 p-4 text-white shadow-md">
+  <header class="bg-blue-500 p-2 text-white shadow-md ">
       <div class="container mx-auto flex justify-between items-center">
-          <h1 class="text-2xl font-bold">
-              <a href="/" class="hover:text-gray-300 transition duration-300">Study Planner</a>
+        <img class="w-12 h-12 border border-collapse" src="/images/plan logo.png" alt="">
+          <h1 class="text-2xl font-bold ">
+              <a href="/" class="hover:text-gray-300 transition duration-300"></a>
           </h1>
           <nav class="space-x-4 flex">
             
             <% var isloggedin = typeof isloggedin !=="undefined" ? isloggedin : true %>
               <% if (isloggedin) { %>
                 <% if (typeof user !== 'undefined' && user.image) { %>
-                  <div class="mt-1">  <a href="/home" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out ">Home</a></div>
-                <div class="mt-1">  <a href="/dashboard" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out ">Dashboard</a></div>
+                  <div class="mt-1">
+                    <a id="home-button" href="/home" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-300 ease-in-out">Home</a>
+                </div>
+                <div class="mt-1">
+                    <a id="dashboard-button" href="/dashboard" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Dashboard</a>
+                </div>
                   <div class="relative ml-3">
                     <div>
                         <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown()">
@@ -34,6 +64,7 @@
                       <!-- Dropdown menu -->
                       <div class="absolute right-0 z-50 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="user-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                         <a href="/Profile/<%= user._id %>" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
+                        <a href="/planTracker" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Progress Tracking</a>
                         <a href="/Account/<%= user._id %>" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
                         <a href="/user/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Logout</a>
                       </div>

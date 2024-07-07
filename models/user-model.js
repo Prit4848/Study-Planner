@@ -29,7 +29,7 @@ const userSchema = mongoose.Schema({
       },
       image:{
       type:  Buffer,
-      require:true
+      
       },
       Background_image:{
         type:  Buffer,

@@ -17,7 +17,7 @@ module.exports.registerUser = async function (req, res) {
         if (err) return res.send(err.message);
         else {
           let user = await userModel.create({
-            image:req.file.buffer,
+            
             username,
             email,
             password: hash,

@@ -1,13 +1,22 @@
-<footer class="bg-gray-800 p-4 text-white text-center mt-auto">
+<footer class="bg-gray-800 p-6 text-white text-center mt-auto">
   <div class="container mx-auto">
-    <p>&copy; 2024 Study Planner</p>
-    <div class="mt-4 flex justify-center">
-      <a href="#" class="text-gray-300 hover:text-white mx-3">Privacy Policy</a>
-      <span class="text-gray-300">|</span>
-      <a href="#" class="text-gray-300 hover:text-white mx-3">Terms of Service</a>
+    <p class="text-lg">&copy; 2024 Study Planner</p>
+    <div class="mt-4 flex justify-center space-x-6">
+      <a class="border rounded-md " href="https://github.com/" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors duration-300">
+        <i class="fab fa-github text-2xl"><img class="h-10 w-10" src="https://tse1.mm.bing.net/th?id=OIP.eTCbdR_AFzbqHMPXhrJWUQHaEK&pid=Api&P=0&h=180" alt=""></i>
+      </a>
+      <a class="border rounded-md " href="https://www.linkedin.com/login" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors duration-300">
+        <i class="fab fa-linkedin-in text-2xl"><img class="h-10 w-10" src="https://tse4.mm.bing.net/th?id=OIP.FPjQ2OolWgNHEDLXkIf98AHaF2&pid=Api&P=0&h=180" alt=""></i>
+      </a>
+      <a class="border rounded-md " href="https://x.com/X" target="_blank" rel="noopener noreferrer" class="text-gray-300 hover:text-white transition-colors duration-300">
+        <i class="fab fa-twitter text-2xl"><img class="h-10 w-10" src="https://tse1.mm.bing.net/th?id=OIP.biG9UdrkNGTbvX1YvOvY4AHaHa&pid=Api&rs=1&c=1&qlt=95&w=111&h=111" alt=""></i>
+      </a>
     </div>
   </div>
 </footer>
+
+
+<!-- // this is for image dropdown -->
   <script>
     function toggleDropdown() {
     const dropdown = document.getElementById('user-dropdown');
@@ -24,6 +33,25 @@
     }
   }
   </script>
+
+<!-- //this is for home page and dashboard button -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+      var currentUrl = window.location.pathname;
+      var homeButton = document.getElementById('home-button');
+      var dashboardButton = document.getElementById('dashboard-button');
+
+      if (currentUrl === '/home') {
+          homeButton.classList.add('bg-gray-300', 'cursor-not-allowed');
+          homeButton.href = 'javascript:void(0)';
+      }
+
+      if (currentUrl === '/dashboard') {
+          dashboardButton.classList.add('bg-gray-300', 'cursor-not-allowed');
+          dashboardButton.href = 'javascript:void(0)';
+      }
+  });
+</script>
   
   <script src="/website/public/javaScrips/script.js"></script>
 </body>

@@ -1,35 +1,30 @@
 <%- include('./partials/header') %>
 <body class="bg-gray-100 text-gray-900">
     <div class="container mx-auto p-4 pt-6 md:p-6 lg:p-12">
-        <div class="flex flex-wrap justify-center mb-4 gap-6">
-            <div class="w-full lg:w-1/2 xl:w-1/3 p-6 bg-white text-gray-800 rounded-lg shadow-lg">
-                <div class="flex flex-col items-center">
-                    <img src="data:image/jpeg;base64,<%= user.image.toString('base64') %>" alt="Profile Name" class="rounded-full w-48 h-48 mb-4">
-                    <h2 class="text-2xl font-bold mb-2 text-center"><%= user.username %></h2>
-                    <p class="text-gray-600 mb-4 text-center"><%= user.Bio %></p>
-                    <ul class="flex space-x-4 mb-4">
-                        <li>
-                            <a href="https://github.com/" target="_blank" rel="noopener noreferrer" >
-                                <i class="fab fa-github text-2xl text-gray-600 hover:text-gray-900 transition-colors duration-300" ></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank" rel="noopener noreferrer">
-                                <i class="fab fa-linkedin-in text-2xl text-gray-600 hover:text-gray-900 transition-colors duration-300"></i>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" target="_blank" rel="noopener noreferrer">
-                                <i class="fab fa-twitter text-2xl text-gray-600 hover:text-gray-900 transition-colors duration-300"></i>
-                            </a>
-                        </li>
-                    </ul>
+        <div class="flex   gap-6 mb-4">
+            <!-- Profile Section -->
+            <div class="w-full lg:w-1/3 p-6 bg-white text-gray-800 rounded-lg shadow-lg flex flex-col items-center">
+                <img src="data:image/jpeg;base64,<%= user.image.toString('base64') %>" alt="Profile Name" class="rounded-full w-48 h-48 mb-4 border-4 border-blue-600">
+                <h2 class="text-2xl font-bold mb-2 text-center text-blue-600"><%= user.username %></h2>
+                <p class="text-gray-600 mb-4 text-center">
+                    <% const bioWords = user.Bio.split(' '); %>
+                    <% bioWords.forEach((word, index) => { %>
+                        <span class="bio-color-<%= index %>"><%= word %></span>
+                    <% }); %>
+                </p>
+                
+                <div class="text-center mt-4">
+                    <p class="text-gray-600">Email: <a href="mailto:<%= user.email %>" class="text-blue-600 hover:underline"><%= user.email %></a></p>
+                    <p class="text-gray-600">Contact: <a href="mailto:<%= user.phone_no %>" class="text-blue-600 hover:underline"><%= user.phone_no %></a></p>
                 </div>
             </div>
-            <div class="w-full lg:w-1/2 xl:w-2/3 p-6 bg-white text-gray-800 rounded-lg shadow-lg">
+            <!-- Study Plan and Goals Section -->
+            <div class="w-full lg:w-2/3 p-6 bg-white text-gray-800 rounded-lg shadow-lg">
                 <div>
-                    <h2 class="text-2xl font-bold mb-4">Study Plan</h2>
-                    <ul class="space-y-2 mb-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold mb-4 text-green-600">Study Plan</h2>
+                    </div>
+                    <ul class="space-y-4 mb-6">
                         <% if (Array.isArray(plan)) { %>
                             <% plan.reverse().forEach(plans => { %>
                                 <% 
@@ -37,10 +32,14 @@
                                     const completedTasks = plans.tasks.filter(task => task.completed).length;
                                     const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
                                 %>
-                                <li class="flex items-center space-x-2">
-                                    <i class="fas fa-book text-gray-600"></i>
-                                    <span class="font-semibold"><%= plans.title %></span>
-                                    <span class="text-gray-500">(Completion: <%= completionPercentage %>%)</span>
+                                <li class="p-4 bg-gray-100 rounded-lg shadow-md">
+                                    <div class="flex justify-between items-center">
+                                        <span class="font-semibold text-lg text-purple-600"><%= plans.title %></span>
+                                        <span class="text-gray-500">(Completion: <%= completionPercentage.toFixed(2) %>%)</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
+                                        <div class="bg-blue-600 h-4 rounded-full" style="width: <%= completionPercentage %>%"></div>
+                                    </div>
                                 </li>
                             <% }) %>
                         <% } else { %>
@@ -49,12 +48,17 @@
                     </ul>
                 </div>
                 <div>
-                    <h2 class="text-2xl font-bold mb-4">Goals</h2>
-                    <ul class="space-y-2 mb-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-2xl font-bold mb-4 text-red-600">Goals</h2>
+                    </div>
+                    <ul class="space-y-4">
                         <% goal.reverse().forEach(goals => { %>
-                            <li class="flex items-center space-x-2">
-                                <i class="fas fa-target text-gray-600"></i>
-                                <span class="font-semibold"><%= goals.goalTitle %></span>
+                            <li class="p-4 bg-gray-100 rounded-lg shadow-md">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-semibold text-lg text-yellow-600"><%= goals.goalTitle %></span>
+                                    <span class="text-gray-500">Due: <%= goals.dueDate.toLocaleDateString() %></span>
+                                </div>
+                                <p class="text-gray-600 mt-2">Priority: <%= goals.priority %></p>
                             </li>
                         <% }) %>
                     </ul>

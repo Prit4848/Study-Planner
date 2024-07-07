@@ -6,7 +6,7 @@ const userModel = require("../models/user-model")
 const goalModel = require("../models/goal-model")
 const {createGoal,viewGoal,editGoal,postEditGoal,deleteGoal,completionGoal} = require("../controllers/goalController")
 
-router.get("/",isloggedin,function(req,res){
+router.get("/create",isloggedin,function(req,res){
     res.render("createGoal")
 })
 
