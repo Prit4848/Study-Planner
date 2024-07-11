@@ -12,6 +12,7 @@
                   const totalTasks = plans.tasks.length;
                   const completedTasks = plans.tasks.filter(task => task.completed).length;
                   const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+                  
               %>
               <li class="mb-4">
                   <div class="bg-gray-100 p-4 rounded-lg shadow">
@@ -26,9 +27,9 @@
                           </span>
                       </div>
                       <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
-                          <div class="bg-green-500 h-4 rounded-full" style="width: <%= completionPercentage %>%;"></div>
+                          <div class="bg-green-500 h-4 rounded-full" style="width: <%= completionPercentage.toFixed(3) %>%;"></div>
                       </div>
-                      <div><p><%= completionPercentage %>%</p></div>
+                      <div><p><%= completionPercentage.toFixed(2) %>%</p></div>
                       <p class="text-sm text-gray-700 mt-1"><%= completedTasks %>/<%= totalTasks %> tasks completed</p>
                   </div>
               </li>

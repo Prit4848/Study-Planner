@@ -1,12 +1,15 @@
 const express = require("express")
 const app = express();
 const cookieparser = require("cookie-parser")
+const bodyParser = require("body-parser")
 const path = require("path")
 // const { reverse } = require("dns");
 const session = require('express-session');
 const flash = require('connect-flash');
 
 require('dotenv').config();
+
+const port = process.env.PORT
 
 const db = require("./config/mongoose-connection")
 const userRoutes = require("./routes/userRouters")
@@ -17,6 +20,8 @@ const indexRouter = require("./routes/indexRouter")
 require('dotenv').config();
 app.use(flash());
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.use(cookieparser());
 app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }));
@@ -35,6 +40,6 @@ app.use('/plan', planRoutes);
 app.use('/goal', goalRouter)
 app.use('/',indexRouter);
 
-app.listen(3000,()=>{
-    console.log("servet started at port 3000")
+app.listen(port,()=>{
+    console.log(`server started at port localhost:${port}`)
 })

@@ -5,7 +5,11 @@
         <!-- Profile Section -->
         <div class="w-full md:w-1/3">
             <div class="flex flex-col items-center p-5 bg-gray-200 rounded-lg shadow-inner">
+                <% if(user.image) { %>
                 <img class="w-32 h-32 rounded-full" src="data:image/jpeg;base64,<%= user.image.toString('base64') %>" alt="Profile Picture">
+                <% } else {%>
+                    <img class="w-32 h-32 rounded-full" src="/images/profile.png" alt="Default Profile" alt="Profile Picture">
+                    <% } %>
                 <h2 class="mt-4 text-xl font-semibold"><%= user.username %></h2>
                 <p class="text-gray-600"><%= user.email %></p>
                 <form action="/user/account/upload-profile-image/<%= user._id %>" method="post" enctype="multipart/form-data" class="mt-4">
@@ -32,14 +36,6 @@
                     <div>
                         <label class="block text-gray-700">Bio</label>
                         <textarea type="text" name="Bio" class="w-full mt-1 p-2 border border-gray-300 rounded-md" ><%= user.Bio %></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-gray-700">Password</label>
-                        <input type="password" name="password" class="w-full mt-1 p-2 border border-gray-300 rounded-md" value="<%= user.password %>">
-                    </div>
-                    <div>
-                        <label class="block text-gray-700">Confirm Password</label>
-                        <input type="password" name="confirm_password" class="w-full mt-1 p-2 border border-gray-300 rounded-md" value="<%= user.password %>">
                     </div>
                     <button type="submit" class="w-full mt-4 bg-blue-600 text-white p-2 rounded-md">Save Changes</button>
                 </form>

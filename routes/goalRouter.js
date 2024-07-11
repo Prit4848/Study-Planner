@@ -7,7 +7,7 @@ const goalModel = require("../models/goal-model")
 const {createGoal,viewGoal,editGoal,postEditGoal,deleteGoal,completionGoal} = require("../controllers/goalController")
 
 router.get("/create",isloggedin,function(req,res){
-    res.render("createGoal")
+    res.render("createGoal",{user:req.user})
 })
 
 router.post("/create-goal",isloggedin,createGoal)

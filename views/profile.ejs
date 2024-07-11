@@ -4,15 +4,22 @@
         <div class="flex   gap-6 mb-4">
             <!-- Profile Section -->
             <div class="w-full lg:w-1/3 p-6 bg-white text-gray-800 rounded-lg shadow-lg flex flex-col items-center">
+                <% if(user.image) { %>
                 <img src="data:image/jpeg;base64,<%= user.image.toString('base64') %>" alt="Profile Name" class="rounded-full w-48 h-48 mb-4 border-4 border-blue-600">
+                <% } else{ %>
+                    <img src="/images/profile.png" alt="Default Profile" class="rounded-full w-48 h-48 mb-4 border-4 border-blue-600">
+                    <% } %>
                 <h2 class="text-2xl font-bold mb-2 text-center text-blue-600"><%= user.username %></h2>
+                <% if(user.Bio){ %>
                 <p class="text-gray-600 mb-4 text-center">
                     <% const bioWords = user.Bio.split(' '); %>
                     <% bioWords.forEach((word, index) => { %>
                         <span class="bio-color-<%= index %>"><%= word %></span>
                     <% }); %>
                 </p>
-                
+                <% } else{ %>
+                    <p class="text-gray-600 mb-4 text-center"></p>
+                    <% } %>
                 <div class="text-center mt-4">
                     <p class="text-gray-600">Email: <a href="mailto:<%= user.email %>" class="text-blue-600 hover:underline"><%= user.email %></a></p>
                     <p class="text-gray-600">Contact: <a href="mailto:<%= user.phone_no %>" class="text-blue-600 hover:underline"><%= user.phone_no %></a></p>
@@ -42,9 +49,8 @@
                                     </div>
                                 </li>
                             <% }) %>
-                        <% } else { %>
-                            <li>No study plans available.</li>
                         <% } %>
+                       
                     </ul>
                 </div>
                 <div>
@@ -61,6 +67,7 @@
                                 <p class="text-gray-600 mt-2">Priority: <%= goals.priority %></p>
                             </li>
                         <% }) %>
+                        
                     </ul>
                 </div>
             </div>

@@ -2,9 +2,9 @@
 <div class="container mx-auto p-4">
   <h1 class="text-2xl font-bold mb-4">Study Plan Tracker</h1>
   <div class="flex flex-wrap -mx-4">
-    <div class="w-full md:w-1/2 p-4">
+    <div class="w-full  md:w-1/2 p-4">
       <div class="bg-white p-4 rounded-lg shadow-md mt-32">
-        <canvas id="planChart"></canvas>
+        <canvas class=" w-full h-screen" id="planChart"></canvas>
       </div>
     </div>
     <div class="w-full md:w-1/2 p-4">
@@ -34,15 +34,34 @@
       return totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     });
 
+    // Determine colors for ups and downs
+    const getColors = (data) => {
+      const upColor = 'rgba(75, 192, 192, 1)'; // Green for ups
+      const downColor = 'rgba(255, 99, 132, 1)'; // Red for downs
+      const colors = [];
+      for (let i = 1; i < data.length; i++) {
+        if (data[i] >= data[i - 1]) {
+          colors.push(upColor);
+        } else {
+          colors.push(downColor);
+        }
+      }
+      colors.unshift(upColor); // Initial point color
+      return colors;
+    };
+
+    const lineColors = getColors(completionData);
+
     // Data for line chart
     const lineData = {
       labels: labels,
       datasets: [{
         label: 'Task Completion',
         data: completionData,
-        backgroundColor: plans.map((_, index) => `rgba(${Math.floor(255 - 42.5 * index)}, ${Math.floor(99 + 50 * index)}, ${Math.floor(132 + 33 * index)}, 0.2)`),
-        borderColor: plans.map((_, index) => `rgba(${Math.floor(255 - 42.5 * index)}, ${Math.floor(99 + 50 * index)}, ${Math.floor(132 + 33 * index)}, 1)`),
-        borderWidth: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0)', // Transparent background for line chart
+        borderColor: lineColors,
+        borderWidth: 2,
+        pointBackgroundColor: lineColors,
         fill: false,
         tension: 0.1
       }]

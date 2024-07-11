@@ -7,32 +7,30 @@ const isLoggedin = require("../middleware/isLoggedin")
 
 module.exports.registerUser = async function (req, res) {
   try {
-    let { username, email, password } = req.body;
+    let { username, email, password ,phone_no} = req.body;
+      
+    let user = await userModel.findOne({ $or: [{ email: email }, { username: username }] });
+    if (user) return res.status(401).send("You already have an account, please login!");
 
-        let user = await userModel.findOne({ $or: [{ email: email }, { username: username }] });
-        if(user) return res.status(401).send("you alreddy have an account,please login !!")
-           
-    bcrypt.genSalt(12, function (err, salt) {
-      bcrypt.hash(password, salt, async function (err, hash) {
-        if (err) return res.send(err.message);
-        else {
-          let user = await userModel.create({
-            
-            username,
-            email,
-            password: hash,
-          });
+    const salt = await bcrypt.genSalt(12);
+    const hash = await bcrypt.hash(password, salt);
 
-          let token = generateToken(user);
-          res.cookie("token", token);
-          let plan = await planModel.find({ userId: user._id });
-          await user.save()
-          res.redirect("/home")
-        }
-      });
+    user_1 = await userModel.create({
+      phone_no,
+      username,
+      email,
+      password: hash,
     });
+
+    
+
+    
+    req.flash('success', 'You are register please login');
+    res.redirect("/user/register")
+    
   } catch (err) {
-    res.send(err.message);
+    res.status(500).send(err.message);
+    console.log(err);
   }
 };
 
@@ -63,16 +61,14 @@ module.exports.logoutUser = async function(req,res){
 
 }
 
-module.exports.getregisterUser = function(req,res){
-  let {email} = req.body;
-  let user  = userModel.findOne({email:email})
-  res.render("register",{user})
+module.exports.getregisterUser =  function(req,res){
+  let success = req.flash("success");
+  res.render("register",{success,user:false})
 }
 
-module.exports.getloginUser = function(req,res){
-  let {email} =req.body;
-  let user =  userModel.findOne({email:email})
-  res.render("login",{user})
+module.exports.getloginUser =  function(req,res){
+  
+  res.render("login",{user:false})
 }
 
 module.exports.uploadProfileImage = async function(req,res){
@@ -91,22 +87,20 @@ module.exports.uploadProfileImage = async function(req,res){
 }
 
 module.exports.AccountUpdate = async function(req,res){
-  let {username,email,phone_no,Bio,password}= req.body;
-  bcrypt.genSalt(12, function (err, salt) {
-    bcrypt.hash(password, salt, async function (err, hash) {
-      if (err) return res.send(err.message);
-      else {
-        let user = await userModel.findOneAndUpdate({
+    try{   
+      let {username,email,phone_no,Bio}= req.body;
+      
+        let user_2 = await userModel.findOneAndUpdate({email:req.user.email},{
           Bio,
           username,
-          email,
           phone_no,
-          password: hash,
-        });
+          
+        },{new:true});
 
-        await user.save();
-        res.redirect(`/Account/${user._id}`);
+        await user_2.save();
+        res.redirect(`/Account/${user_2._id}`);
+      }catch(err){
+       res.send(err.message)
+       console.log(err)
       }
-    });
-  });
 }

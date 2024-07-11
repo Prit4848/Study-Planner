@@ -15,7 +15,7 @@ const userSchema = mongoose.Schema({
         trim: true
       },
       phone_no:{
-        type: Number,
+        type: String,
         unique: true,
         trim: true
       },
@@ -33,7 +33,7 @@ const userSchema = mongoose.Schema({
       },
       Background_image:{
         type:  Buffer,
-        require:true
+        
         },
       Bio:String,
 })

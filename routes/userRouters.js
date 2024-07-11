@@ -17,7 +17,7 @@ router.get("/", function (req, res) {
 
 
 router.get("/register",getregisterUser)
-router.post("/register",upload.single("image"), registerUser);
+router.post("/register", registerUser);
 router.get("/login",getloginUser)
 router.post("/login",loginUser);
 router.get("/logout",logoutUser);

@@ -21,7 +21,8 @@ const taskSchema = new mongoose.Schema({
   completed: {
     type: Boolean,
     default: false
-  }
+  },
+  reminderJobId: { type: String }
 });
 
 const planSchema = new mongoose.Schema({
@@ -48,6 +49,7 @@ const planSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+ 
 });
 
 module.exports = mongoose.model('Plan', planSchema);

@@ -3,7 +3,7 @@ const router = express.Router()
 
 const planModel = require("../models/plan-model")
 const isLoggedIn = require("../middleware/isLoggedin")
-const {createPlans,postcreatePlans,postPlancheck,editPlan,posteditPlan,postTaskCompletion,postDelete,planTracker} = require("../controllers/planController")
+const {createPlans,postcreatePlans,postPlancheck,editPlan,posteditPlan,postTaskCompletion,postDelete,setReminder} = require("../controllers/planController")
 
 //create plan routs
 router.get("/create/:userid",isLoggedIn,createPlans)
@@ -18,6 +18,7 @@ router.post("/:planid/:userid/edit",isLoggedIn,posteditPlan)
 router.post("/:planid/:taskid/toggle",isLoggedIn,postTaskCompletion)
 router.post("/delete/:planid",isLoggedIn,postDelete)
 
-
+// set reminder
+router.post("/:planId/set-reminder",isLoggedIn,setReminder)
 
 module.exports = router;

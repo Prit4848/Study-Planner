@@ -13,7 +13,7 @@ router.get("/",async function(req,res){
     res.render("index",{ error,isloggedin:false });
     // res.send("hello brother")
 })
- router.get("/home",isloggedin,function(req,res){
+router.get("/home",isloggedin,function(req,res){
   
     res.render("home",{user:req.user})
  })
