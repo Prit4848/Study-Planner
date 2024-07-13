@@ -10,7 +10,7 @@ router.get("/",async function(req,res){
     let { email } = req.body;
     let error = req.flash("error");
     // let user = await userModel.findOne({email:email})
-    res.render("index",{ error,isloggedin:false });
+    res.render("index",{ error });
     // res.send("hello brother")
 })
 router.get("/home",isloggedin,function(req,res){
@@ -54,6 +54,42 @@ router.get("/planTracker",isloggedin,async function(req,res){
         res.render("planTracker",{plans,user:req.user})
     }catch(err){
         res.send(err.messege);
+    }
+})
+
+router.get("/h-oraganize-shedule",(req,res)=>{
+    try{
+         res.render("h_organize_shedule",{user:false})
+    }catch(err){
+        res.send(err.message)
+        conasole.log(err)
+    }
+})
+
+router.get("/h-oraganize-golal",(req,res)=>{
+    try{
+         res.render("h_organize_golas",{user:false})
+    }catch(err){
+        res.send(err.message)
+        conasole.log(err)
+    }
+})
+
+router.get("/h-personalize-alert",(req,res)=>{
+    try{
+         res.render("h_personalize_alert",{user:false})
+    }catch(err){
+        res.send(err.message)
+        conasole.log(err)
+    }
+})
+
+router.get("/h-tracking-progress",(req,res)=>{
+    try{
+         res.render("h_tracking_progress",{user:false})
+    }catch(err){
+        res.send(err.message)
+        conasole.log(err)
     }
 })
 

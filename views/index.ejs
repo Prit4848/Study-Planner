@@ -1,38 +1,38 @@
 <%- include('./partials/header') %>
-<% if(error.length > 0) { %>
-  <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-red-500 mb-5">
-    <span class="inline-block mt-1 mb-1 text-white">
-      <%= error %>
-    </span>
-  </div>
-<% } %>
+
 <div class="container mx-auto p-4 relative z-10">
   <h1 class="text-4xl text-center mt-8 text-black">Welcome to Study Planner</h1>
 </div>
+
 <!-- Features Section -->
 <div class="container mx-auto p-4 mt-10">
     <h2 class="text-3xl font-bold text-center text-blue-600">Features</h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
       <div class="bg-white p-6 rounded-lg shadow-lg text-center">
         <img src="/images/organized_1.jpeg" alt="Feature 1" class="mx-auto mb-4 w-16 h-16">
-        <h3 class="text-xl font-semibold text-gray-800">Organize Your Schedule</h3>
+        <a href="/h-oraganize-shedule" class="text-xl font-semibold text-gray-800">Organize Your Schedule</a>
         <p class="text-gray-600 mt-2">Easily organize and manage your study schedule.</p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow-lg text-center">
         <img src="/images/track_1.jpeg" alt="Feature 2" class="mx-auto mb-4 w-16 h-16">
-        <h3 class="text-xl font-semibold text-gray-800">Track Your Progress</h3>
+        <a href="/h-tracking-progress" class="text-xl font-semibold text-gray-800">Track Your Progress</a>
         <p class="text-gray-600 mt-2">Monitor your progress and stay motivated.</p>
       </div>
       <div class="bg-white p-6 rounded-lg shadow-lg text-center">
         <img src="/images/goals_1.jpeg" alt="Feature 3" class="mx-auto mb-4 w-16 h-16">
-        <h3 class="text-xl font-semibold text-gray-800">Organize Your Goals</h3>
+        <a href="/h-oraganize-golal" class="text-xl font-semibold text-gray-800">Organize Your Goals</a>
         <p class="text-gray-600 mt-2">Set and organize your study goals effectively.</p>
       </div>
+      <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <img src="/images/alert_1.jpeg" alt="Feature 4" class="mx-auto mb-4 w-16 h-16">
+        <a href="/h-personalize-alert" class="text-xl font-semibold text-gray-800">Personalize Alerts</a>
+        <p class="text-gray-600 mt-2">Set personalized alerts to never miss a study session.</p>
+      </div>
     </div>
-  </div>
-  
-  <!-- Testimonials Section -->
-  <div class="container mx-auto p-4 mt-10">
+</div>
+
+<!-- Testimonials Section -->
+<div class="container mx-auto p-4 mt-10">
     <h2 class="text-3xl font-bold text-center text-blue-600">Testimonials</h2>
     <div class="mt-6">
       <div class="bg-white p-6 rounded-lg shadow-lg text-center">
@@ -41,12 +41,9 @@
       </div>
       <div class="bg-white p-6 rounded-lg shadow-lg text-center mt-6">
         <p class="text-gray-800 italic">"I love the simplicity and effectiveness of Study Planner. Highly recommend it!"</p>
-        <p class="mt-4 text-gray-600">- Ashish patel</p>
+        <p class="mt-4 text-gray-600">- Ashish Patel</p>
       </div>
     </div>
-  </div>
-  
-
-
+</div>
 
 <%- include('./partials/footer') %>

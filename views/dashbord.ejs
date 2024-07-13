@@ -5,7 +5,12 @@
     <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
     <p class="text-lg mb-6">Welcome, <%= user.username %>!</p>
     <main class="container mx-auto p-4">
-      <h2 class="text-2xl font-semibold mb-4">Your Study Plans</h2>
+     <div class="flex justify-between">
+        <h2 class="text-2xl font-semibold mb-4">Your Study Plans</h2>
+        <div >
+            <a href="/plan/create/<%= user._id %>" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Plan</a>
+        </div>
+      </div>
       <ul class="list-disc pl-6 space-y-2">
           <% plan.reverse().forEach(plans => { %>
               <% 
@@ -35,13 +40,16 @@
               </li>
           <% }) %>
       </ul>
-      <div class="mt-6">
-          <a href="/plan/create/<%= user._id %>" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Plan</a>
-      </div>
+      
   </main>
     <!-- Goals Section -->
     <main class="container mx-auto p-4">
-    <h2 class="text-2xl font-semibold mt-8 mb-4">Your Goals</h2>
+        <div class="flex justify-between">
+            <h2 class="text-2xl font-semibold mt-8 mb-4">Your Goals</h2>
+            <div class="mt-6">
+                <a href="/goal/create" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Goal</a>
+            </div>
+        </div>
     <ul class="list-disc pl-6 space-y-2">
         <% goal.reverse().forEach(goals => { %>
             <li class="mb-4">
@@ -63,9 +71,7 @@
             </li>
         <% }) %>
     </ul>
-    <div class="mt-6">
-        <a href="/goal/create" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Goal</a>
-    </div>
+    
     </main>
 
   </div>

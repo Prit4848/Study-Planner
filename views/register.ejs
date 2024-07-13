@@ -26,7 +26,14 @@
       <label for="password" class="block text-gray-700">Password</label>
       <input type="password" name="password" id="password" class="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
     </div>
-    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition duration-300">Register</button>
+    <div class="flex justify-between items-center">
+      <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600 transition duration-300">Register</button>
+      <div class="flex items-center space-x-2">
+        <p class="text-gray-600">Already registered?</p>
+        <a class="text-blue-600 font-bold hover:underline" href="/user/login">Login</a>
+      </div>
+    </div>
+    
   </form>
 </div>
 
