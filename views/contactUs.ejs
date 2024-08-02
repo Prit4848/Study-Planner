@@ -1,0 +1,36 @@
+<%- include('./partials/header') %>
+<main class="container mx-auto p-6 flex flex-wrap justify-center">
+    <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg mb-8">
+      <h2 class="text-3xl font-bold mb-6 text-center">Contact Us</h2>
+      <form method="post" action="/user/contactUs" class="space-y-6">
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
+          <input type="text" name="name" id="name" aria-label="Name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" name="email" id="email" aria-label="Email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required>
+        </div>
+        <div>
+          <label for="message" class="block text-sm font-medium text-gray-700">Message</label>
+          <textarea id="message" name="message" aria-label="Message" rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" required></textarea>
+        </div>
+        <div class="flex justify-center">
+          <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-md hover:bg-blue-700 transition duration-300">Send Message</button>
+        </div>
+      </form>
+    </div>
+    <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg mb-8">
+      <h3 class="text-2xl font-bold mb-4 text-center">Our Location</h3>
+      <div class="w-full h-64">
+        <iframe
+          width="100%"
+          height="100%"
+          style="border:0"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3715.799303332242!2d73.10203491493237!3d21.091562379184702!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3be0674c90ed97ef%3A0x525fd0e16a7025f3!2sR.N.G.%20Patel%20Institute%20of%20Technology!5e0!3m2!1sen!2sin!4v1620643171596!5m2!1sen!2sin"
+          allowfullscreen
+          aria-label="R.N.G. Patel Institute of Technology Location">
+        </iframe>
+      </div>
+    </div>
+  </main>

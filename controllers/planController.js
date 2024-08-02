@@ -25,33 +25,58 @@ module.exports.createPlans =async function(req,res){
 }
 
 module.exports.postcreatePlans = async function(req,res){
-  try {
-    const { title, description, date, tasks } = req.body;
-
-    // Ensure tasks is defined and is an array
-    if (!tasks || !Array.isArray(tasks)) {
-        return res.status(400).send("Tasks are required and should be an array");
-    }
-
-    const plan = await planModel.create({
-        userId: req.user._id,
-        title,
-        description,
-        date,
-        tasks: tasks.map((task) => ({
-            title: task.title,
-            description: task.description,
-            startTime: task.startTime,
-            endTime: task.endTime
-        }))
-    });
-
-    await plan.save();
-    res.render("viewPlan", { plan,user:req.user });
-} catch (err) {
-    console.error(err);
-    res.status(500).send("Internal server error");
-}
+    try {
+        const { title, description, date, tasks } = req.body;
+        
+        
+        const user = await userModel.findOne({_id:req.user})
+        
+        if (!user) {
+          return res.status(404).send("User not found");
+        }
+    
+        const today = new Date();
+        const todayDateString = today.toDateString();
+        const lastPlanDateString = user.lastPlanDate ? user.lastPlanDate.toDateString() : null;
+    
+        if (lastPlanDateString === todayDateString) {
+          // User has already created a plan today
+          return res.redirect('/dashboard');
+        }
+    
+        if (lastPlanDateString && new Date(lastPlanDateString).getTime() === (new Date(today).getTime() - 86400000)) {
+          user.streak += 1; // Increment streak if the last plan was created yesterday
+        } else {
+          user.streak = 1; // Reset streak if not consecutive days
+        }
+    
+        user.lastPlanDate = today;
+    
+        // Ensure tasks is defined and is an array
+        if (!tasks || !Array.isArray(tasks)) {
+            return res.status(400).send("Tasks are required and should be an array");
+        }
+    
+        const plan = await planModel.create({
+            userId: user._id,
+            title,
+            description,
+            date,
+            tasks: tasks.map((task) => ({
+                title: task.title,
+                description: task.description,
+                startTime: task.startTime,
+                endTime: task.endTime
+            }))
+        });
+    
+        await plan.save();
+        await user.save();
+        res.render("viewPlan", { plan, user });
+      } catch (err) {
+        console.error(err);
+        res.status(500).send("Internal server error");
+      }
 }
 
 module.exports.postPlancheck =async function(req,res){

@@ -93,4 +93,36 @@ router.get("/h-tracking-progress",(req,res)=>{
     }
 })
 
+router.get("/contactUs",(req,res)=>{  // contact us get page
+    try{
+      res.render("contactUs",{user:false})
+    }catch(err){
+       res.send(err.message)
+    }
+})
+
+router.get("/aboutUs",(req,res)=>{ //about us get page
+    try{
+      res.render("AboutUs",{user:false})
+    }catch(err){
+       res.send(err.message)
+    }
+})
+
+router.get("/services",(req,res)=>{ //services get page
+    try{
+      res.render("services",{user:false})
+    }catch(err){
+       res.send(err.message)
+    }
+})
+
+router.get("/whyUs",(req,res)=>{    // why us get page
+    try{
+      res.render("whyUs",{user:false})
+    }catch(err){
+       res.send(err.message)
+    }
+})
+
 module.exports = router;

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils/generateTokens");
 const isLoggedin = require("../middleware/isLoggedin")
+const nodemailer = require('nodemailer'); // for sending the email
 
 module.exports.registerUser = async function (req, res) {
   try {
@@ -103,4 +104,33 @@ module.exports.AccountUpdate = async function(req,res){
        res.send(err.message)
        console.log(err)
       }
+}
+
+//contactUs Post
+module.exports.contactUs = async (req,res)=>{
+  const { name, email, message } = req.body;
+
+  // Setup nodemailer transport
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER, // replace with your email
+      pass: process.env.EMAIL_PASS // replace with your email password
+    }
+  });
+
+  const mailOptions = {
+    from: email,
+    to: process.env.EMAIL_USER, // replace with your email
+    subject: `New contact form submission from ${name}`,
+    text: message
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.redirect("contactUs")
+  } catch (error) {
+    console.error(error);
+    res.redirect('/contactUs');
+  }
 }

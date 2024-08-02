@@ -36,6 +36,13 @@ const userSchema = mongoose.Schema({
         
         },
       Bio:String,
+      streak: {
+        type: Number,
+        default: 0
+      },
+      lastPlanDate: {
+        type: Date,
+      }
 })
 
 module.exports = mongoose.model("user",userSchema)

@@ -6,7 +6,7 @@ const userModel = require("../models/user-model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const {generateToken} = require("../utils/generateTokens");
-const { registerUser,loginUser,logoutUser,getregisterUser, getloginUser,uploadProfileImage,AccountUpdate} = require("../controllers/userController")
+const { registerUser,loginUser,logoutUser,getregisterUser, getloginUser,uploadProfileImage,AccountUpdate,contactUs} = require("../controllers/userController")
 const upload = require("../config/multer-config");
 const isloggedin = require("../middleware/isLoggedin")
 
@@ -24,6 +24,8 @@ router.get("/logout",logoutUser);
 router.post("/account/update",isloggedin,AccountUpdate)
 router.post("/account/upload-profile-image/:userid",upload.single("image"),uploadProfileImage);
 
+//contactus
+router.post("/contactUs",contactUs)
 
 
 module.exports = router;
