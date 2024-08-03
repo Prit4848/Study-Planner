@@ -30,6 +30,7 @@ module.exports.postcreatePlans = async function(req,res){
         
         
         const user = await userModel.findOne({_id:req.user})
+       
         
         if (!user) {
           return res.status(404).send("User not found");
@@ -39,19 +40,19 @@ module.exports.postcreatePlans = async function(req,res){
         const todayDateString = today.toDateString();
         const lastPlanDateString = user.lastPlanDate ? user.lastPlanDate.toDateString() : null;
     
-        if (lastPlanDateString === todayDateString) {
-          // User has already created a plan today
-          return res.redirect('/dashboard');
-        }
+        // if (lastPlanDateString === todayDateString) {
+        //   // User has already created a plan today
+        //   return res.redirect('/dashboard');
+        // }
     
-        if (lastPlanDateString && new Date(lastPlanDateString).getTime() === (new Date(today).getTime() - 86400000)) {
+        if (lastPlanDateString || new Date(lastPlanDateString).getTime() === (new Date(today).getTime() - 86400000)) {
           user.streak += 1; // Increment streak if the last plan was created yesterday
         } else {
           user.streak = 1; // Reset streak if not consecutive days
         }
     
         user.lastPlanDate = today;
-    
+        
         // Ensure tasks is defined and is an array
         if (!tasks || !Array.isArray(tasks)) {
             return res.status(400).send("Tasks are required and should be an array");

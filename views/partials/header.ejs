@@ -7,23 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/styleSheets/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-     .stars .fa-star {
-        margin-right: 4px;
-        font-size: 1.25rem; /* Adjust the size of the stars */
-       }
-    </style>
+   
     
 </head>
-<body id="body" style="background-color:rgb(123, 157, 238);" class= min-h-screen">
+<body id="body"  class= bg-gray-100 min-h-screen" >
   <header class="bg-blue-500 p-2 text-white shadow-md">
     <div class="container mx-auto flex justify-between items-center">
       <img class="w-12 h-12 border border-collapse object-fit:cover" src="/images/plan logo.png" alt="">
       
       <nav class="space-x-4 flex mt-2 mb-2">
-        <div class="mt-2">
-          <a id="change-bg" href="#" class="bg-zinc-600 text-white px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300 ease-in-out">Dark</a>
-        </div>
+        
         <% var isloggedin = typeof isloggedin !== "undefined" ? isloggedin : true; %>
         <% if (isloggedin) { %>
           <% if (typeof user !== 'undefined' && user._id) { %>
