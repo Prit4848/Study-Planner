@@ -5,10 +5,11 @@ const planModel = require("../models/plan-model")
 const userModel = require("../models/user-model")
 const twilio = require('twilio');
 const cron = require('node-cron');
+const { client }= require("../middleware/whatsapp")
 
 const accountSid = process.env.SID; 
 const authToken = process.env.SID_TOKEN; 
-const client = new twilio(accountSid, authToken);
+// const client = new twilio(accountSid, authToken);
 
 // create plan routs
 module.exports.createPlans =async function(req,res){
@@ -173,50 +174,46 @@ module.exports.postDelete = async function(req, res) {
 
 // set reminder
 
-module.exports.setReminder = async function(req,res){
-    const {reminderDate} = req.body;
+module.exports.setReminder = async function(req, res) {
+    const { reminderDate } = req.body;
     const phone_no = req.user.phone_no;
-    const userId = req.user._id
-    const planId = req.params.planId
-    try{
-      let plan = await planModel.findOne({_id:req.params.planId})
+    const userId = req.user._id;
+    const planId = req.params.planId;
+    console.log(phone_no)
+    try {
+        let plan = await planModel.findOne({ _id: req.params.planId });
 
-      const reminderDateObj = new Date(reminderDate);
-      const tasksInfo = plan.tasks.map(task => `${task.title} (${task.startTime} - ${task.endTime})`).join(', ');
-      const messageBody = `Reminder for your plan: ${plan.title} - ${plan.description}. Tasks: ${tasksInfo}`;
+        const reminderDateObj = new Date(reminderDate);
+        const tasksInfo = plan.tasks.map(task => `${task.title} (${task.startTime} - ${task.endTime})`).join(', ');
+        const messageBody = `Reminder for your plan: ${plan.title} - ${plan.description}. Tasks: ${tasksInfo}`;
 
-    console.log(messageBody)
+        console.log(messageBody);
 
-    // Schedule the WhatsApp message
-    const job = cron.schedule(
-      `${reminderDateObj.getUTCSeconds()} ${reminderDateObj.getUTCMinutes()} ${reminderDateObj.getUTCHours()} ${reminderDateObj.getUTCDate()} ${reminderDateObj.getUTCMonth() + 1} *`,
-      () => {
-        client.messages.create({
-          body: messageBody,
-          from: 'whatsapp:+14155238886', // Your Twilio WhatsApp number
-          to: `whatsapp:+91${phone_no}`
-        })
-        .then(message => {
-          console.log(`Message sent: ${message.sid} : ${message.to}`);
-          
-        })
-        .catch(err => {
-          console.error('Failed to send WhatsApp message', err);
-        });
-      },
-      {
-        timezone: 'UTC'
-      }
-    );
+        // Schedule the WhatsApp message
+        const job = cron.schedule(
+            `${reminderDateObj.getUTCSeconds()} ${reminderDateObj.getUTCMinutes()} ${reminderDateObj.getUTCHours()} ${reminderDateObj.getUTCDate()} ${reminderDateObj.getUTCMonth() + 1} *`,
+            () => {
+                client.sendMessage(`91${phone_no}@c.us`, messageBody)
+                .then(response => {
+                    console.log(`Message sent to ${phone_no}: ${response.id._serialized}`);
+                })
+                .catch(err => {
+                    console.error('Failed to send WhatsApp message', err);
+                });
+            },
+            {
+                timezone: 'UTC'
+            }
+        );
+         console.log(job.id)
+        // Save the scheduled job for later reference if needed
+        plan.reminderJobId = job.id;
+        console.log(plan.reminderJobId);
+        await plan.save();
 
-    // Save the scheduled job for later reference if needed
-    plan.reminderJobId = job.id;
-    console.log(plan.reminderJobId)
-    await plan.save();
-    
-    res.redirect(`/plan/${planId}/${userId}`);
-    }catch(err){
-        res.send(err.messege)
-        console.log(err)
+        res.redirect(`/plan/${planId}/${userId}`);
+    } catch (err) {
+        res.send(err.message);
+        console.log(err);
     }
-}
+};
