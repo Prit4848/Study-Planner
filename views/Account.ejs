@@ -3,8 +3,8 @@
     <div class="flex flex-col md:flex-row gap-10">
         
         <!-- Profile Section -->
-        <div class="w-full md:w-1/3">
-            <div class="flex flex-col items-center p-5 bg-gray-200 rounded-lg shadow-inner">
+        <div class="w-full md:w-1/3 reveal">
+            <div class="flex flex-col items-center p-5 bg-gray-200 rounded-lg shadow-inner reveal">
                 <% if(user.image) { %>
                 <img class="w-32 h-32 rounded-full" src="data:image/jpeg;base64,<%= user.image.toString('base64') %>" alt="Profile Picture">
                 <% } else {%>
@@ -22,18 +22,18 @@
 
         <!-- Account Settings Section -->
         <div class="w-full md:w-2/3">
-            <div class="p-5 bg-gray-100 rounded-lg shadow-inner">
+            <div class="p-5 bg-gray-100 rounded-lg shadow-inner reveal">
                 <h2 class="text-xl font-semibold mb-4">Account Settings</h2>
                 <form action="/user/account/update" method="post" class="space-y-4">
-                    <div>
+                    <div class="reveal">
                         <label class="block text-gray-700">Name</label>
                         <input type="text" name="username" class="w-full mt-1 p-2 border border-gray-300 rounded-md" value="<%= user.username %>">
                     </div>
-                    <div>
+                    <div class="reveal">
                         <label class="block text-gray-700">Phone No</label>
                         <input type="tel" name="phone_no" class="w-full mt-1 p-2 border border-gray-300 rounded-md" value="<%= user.phone_no %>">
                     </div>
-                    <div>
+                    <div class="reveal">
                         <label class="block text-gray-700">Bio</label>
                         <textarea type="text" name="Bio" class="w-full mt-1 p-2 border border-gray-300 rounded-md" ><%= user.Bio %></textarea>
                     </div>
@@ -43,5 +43,24 @@
         </div>
     </div>
 </main>
+<script>
+    // Intersection Observer to reveal elements on scroll
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    revealElements.forEach(el => {
+      observer.observe(el);
+    });
+    </script>
+    
+    <%- include('./partials/footer') %>
 
-<%- include('./partials/footer') %>
+

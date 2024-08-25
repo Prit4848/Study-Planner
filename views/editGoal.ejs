@@ -1,29 +1,29 @@
 <%- include('./partials/header') %>
  <!-- Main Content -->
  <main class="container mx-auto p-4">
-    <div class="bg-white p-6 rounded-lg shadow-lg">
+    <div class="bg-white p-6 rounded-lg shadow-lg reveal">
         <h2 class="text-2xl font-bold mb-4">Update Goal</h2>
 
         <form action="/goal/<%= goal._id %>/<%= goal.userId %>/edit" method="POST" class="space-y-4">
-            <div>
+            <div class="reveal">
                 <label for="goalTitle" class="block text-sm font-medium text-gray-700">Goal Title</label>
                 <input type="text" id="goalTitle" name="goalTitle" required
                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="<%= goal.goalTitle %>">
             </div>
 
-            <div>
+            <div class="reveal">
                 <label for="goalDescription" class="block text-sm font-medium text-gray-700">Description</label>
                 <textarea id="goalDescription" name="goalDescription" rows="4" required
                           class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"><%= goal.goalDescription %></textarea>
             </div>
 
-            <div>
+            <div class="reveal">
                 <label for="dueDate" class="block text-sm font-medium text-gray-700">Due Date</label>
                 <input type="date" id="dueDate" name="dueDate" required
                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" value="<%= goal.dueDate.toISOString().substr(0, 10) %>">
             </div>
 
-            <div>
+            <div class="reveal">
                 <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
                 <select id="priority" name="priority" required
                     value="<%= goal.priority %>"    class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm" >
@@ -33,7 +33,7 @@
                 </select>
             </div>
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-between reveal">
                 <button type="submit"
                         class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
                    save changes
@@ -44,4 +44,22 @@
         </form>
     </div>
 </main>
-<%- include('./partials/footer') %>
+<script>
+    // Intersection Observer to reveal elements on scroll
+    const revealElements = document.querySelectorAll('.reveal');
+    
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    revealElements.forEach(el => {
+      observer.observe(el);
+    });
+    </script>
+    
+    <%- include('./partials/footer') %>

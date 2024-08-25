@@ -41,7 +41,8 @@ const userSchema = mongoose.Schema({
       },
       lastPlanDate: {
         type: Date,
-      }
+      },
+      otp:{type:Number,default:0}
 })
 
 module.exports = mongoose.model("user",userSchema)

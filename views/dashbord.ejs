@@ -1,91 +1,164 @@
 <%- include('./partials/header') %>
 
-<div class="container mx-auto p-4">
-  <div class="bg-white shadow-md rounded-lg p-6 mt-10">
-      <div class="flex justify-between items-center">
-        <div class="container mx-auto p-4">
-            <div class="bg-white shadow-md rounded-lg p-6 mt-10">
-              <div>
-                <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
-                <p class="text-lg mb-6">Welcome, <%= user.username %>!</p>
-              </div>
-              <div class="mb-6">
-                <h2 class="fas fa-star text-xl font-semibold">Current Streak:⭐ <%= user.streak %> days</h2>
-              </div>
-            </div>
-          </div>
-      </div>
-    <main class="container mx-auto p-4">
-     <div class="flex justify-between">
-        <h2 class="text-2xl font-semibold mb-4">Your Study Plans</h2>
-        <div >
-            <a href="/plan/create/<%= user._id %>" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Plan</a>
-        </div>
-      </div>
-      <ul class="list-disc pl-6 space-y-2">
-          <% plan.reverse().forEach(plans => { %>
-              <% 
-                  const totalTasks = plans.tasks.length;
-                  const completedTasks = plans.tasks.filter(task => task.completed).length;
-                  const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-                  
-              %>
-              <li class="mb-4">
-                  <div class="bg-gray-100 p-4 rounded-lg shadow">
-                      <div class="flex justify-between items-center">
-                        <h3 class="text-xl font-semibold text-gray-900"><%= plans.title %> - Date: <%= new Date(plans.date).toDateString() %></h3>
-                          <span class="flex space-x-2">
-                              <a href="/plan/<%= plans._id %>/<%= plans.userId %>" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">View Plan</a>
-                              <a href="/plan/<%= plans._id %>/<%= plans.userId %>/edit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300 ease-in-out">Edit</a>
-                              <form action="/plan/delete/<%= plans._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this plan?');" class="inline">
-                                  <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">Delete</button>
-                              </form>
-                          </span>
-                      </div>
-                      <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
-                          <div class="bg-green-500 h-4 rounded-full" style="width: <%= completionPercentage.toFixed(3) %>%;"></div>
-                      </div>
-                      <div><p><%= completionPercentage.toFixed(2) %>%</p></div>
-                      <p class="text-sm text-gray-700 mt-1"><%= completedTasks %>/<%= totalTasks %> tasks completed</p>
-                  </div>
-              </li>
-          <% }) %>
-      </ul>
-      
-  </main>
-    <!-- Goals Section -->
-    <main class="container mx-auto p-4">
-        <div class="flex justify-between">
-            <h2 class="text-2xl font-semibold mt-8 mb-4">Your Goals</h2>
-            <div class="mt-6">
-                <a href="/goal/create" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Goal</a>
-            </div>
-        </div>
-    <ul class="list-disc pl-6 space-y-2">
-        <% goal.reverse().forEach(goals => { %>
-            <li class="mb-4">
-                <div class="bg-gray-100 p-4 rounded-lg shadow">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-xl font-semibold"><%= goals.goalTitle %></h3>
-                        <span class="flex space-x-2">
-                            <a href="/goal/<%= goals._id %>/<%= goals.userId %>/view" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">View Goal</a>
-                            <a href="/goal/<%= goals._id %>/<%= goals.userId %>/edit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300 ease-in-out">Edit</a>
-                            <form action="/goal/delete/<%= goals._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this goal?');" class="inline">
-                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">Delete</button>
-                            </form>
-                        </span>
-                    </div>
-                  
-                    <p class="text-sm text-gray-700 mt-1">Due Date: <%= new Date(goals.dueDate).toDateString() %></p>
-                    <p class="text-sm text-gray-700 mt-1">Priority: <%= goals.priority %></p>
-                </div>
-            </li>
-        <% }) %>
-    </ul>
-    
-    </main>
+<div class="container mx-auto p-4 reveal flex justify-between">
+  <!-- Dashboard Section -->
+  <div class="bg-white shadow-md rounded-lg p-6 mt-10 reveal flex-1 mr-6">
+    <div class="reveal">
+      <h1 class="text-3xl font-bold mb-4">Dashboard</h1>
+      <p class="text-lg mb-6">Welcome, <%= user.username %>!</p>
+    </div>
+    <div class="mb-6 reveal">
+      <h2 class="fas fa-star text-xl font-semibold">Current Streak:⭐ <%= user.streak %> days</h2>
+    </div>
+    <div class="mb-6 reveal">
+      <label for="date-filter" class="block text-sm font-medium text-gray-700">Filter by Date:</label>
+      <select id="date-filter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" onchange="filterPlans()">
+        <option value="all">All Time</option>
+        <option value="week">Last Week</option>
+        <option value="month">Last Month</option>
+        <option value="year">Last Year</option>
+      </select>
+    </div>
+    <div class="mb-6 reveal">
+      <label for="completion-filter" class="block text-sm font-medium text-gray-700">Filter by Completion:</label>
+      <select id="completion-filter" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md" onchange="filterPlans()">
+        <option value="all">All Plans</option>
+        <option value="completed">Completed</option>
+        <option value="non-completed">Non-Completed</option>
+      </select>
+    </div>
+  </div>
 
+  <!-- Image Section -->
+  <div class="bg-white shadow-md rounded-lg p-6 mt-10 reveal flex-none" style="width: 30%;">
+    
+    <img src="/images/motivated image.jpg" alt="Motivational Image" class="w-full h-full rounded-lg shadow-md object-cover">
   </div>
 </div>
+
+<main class="container mx-auto p-4 mt-8">
+  <div class="flex justify-between">
+    <h2 class="text-2xl font-semibold mb-4">Your Study Plans</h2>
+    <div>
+      <a href="/plan/create/<%= user._id %>" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Plan</a>
+    </div>
+  </div>
+  <ul class="list-disc pl-6 space-y-2" id="plans-list">
+    <% plan.reverse().forEach(plans => { %>
+      <% 
+        const totalTasks = plans.tasks.length;
+        const completedTasks = plans.tasks.filter(task => task.completed).length;
+        const completionPercentage = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
+      %>
+      <li class="mb-4 reveal plan-item" data-date="<%= new Date(plans.date).toISOString() %>" data-completed="<%= completedTasks === totalTasks %>">
+        <div class="bg-gray-100 p-4 rounded-lg shadow">
+          <div class="flex justify-between items-center">
+            <h3 class="text-xl font-semibold text-gray-900"><%= plans.title %> - Date: <%= new Date(plans.date).toDateString() %></h3>
+            <span class="flex space-x-2">
+              <a href="/plan/<%= plans._id %>/<%= plans.userId %>" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">View Plan</a>
+              <a href="/plan/<%= plans._id %>/<%= plans.userId %>/edit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300 ease-in-out">Edit</a>
+              <form action="/plan/delete/<%= plans._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this plan?');" class="inline">
+                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">Delete</button>
+              </form>
+            </span>
+          </div>
+          <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
+            <div class="bg-green-500 h-4 rounded-full" style="width: <%= completionPercentage.toFixed(3) %>%;"></div>
+          </div>
+          <div><p><%= completionPercentage.toFixed(2) %>%</p></div>
+          <p class="text-sm text-gray-700 mt-1"><%= completedTasks %>/<%= totalTasks %> tasks completed</p>
+        </div>
+      </li>
+    <% }) %>
+  </ul>
+</main>
+<div>
+   <!-- Goals Section -->
+   <main class="container mx-auto p-4">
+    <div class="flex justify-between">
+      <h2 class="text-2xl font-semibold mt-8 mb-4">Your Goals</h2>
+      <div class="mt-6">
+        <a href="/goal/create" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">Create New Goal</a>
+      </div>
+    </div>
+    <ul class="list-disc pl-6 space-y-2">
+      <% goal.reverse().forEach(goals => { %>
+        <li class="mb-4 reveal">
+          <div class="bg-gray-100 p-4 rounded-lg shadow">
+            <div class="flex justify-between items-center">
+              <h3 class="text-xl font-semibold"><%= goals.goalTitle %></h3>
+              <span class="flex space-x-2">
+                <a href="/goal/<%= goals._id %>/<%= goals.userId %>/view" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-300 ease-in-out">View Goal</a>
+                <a href="/goal/<%= goals._id %>/<%= goals.userId %>/edit" class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 transition duration-300 ease-in-out">Edit</a>
+                <form action="/goal/delete/<%= goals._id %>" method="POST" onsubmit="return confirm('Are you sure you want to delete this goal?');" class="inline">
+                  <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-300 ease-in-out">Delete</button>
+                </form>
+              </span>
+            </div>
+            <p class="text-sm text-gray-700 mt-1">Due Date: <%= new Date(goals.dueDate).toDateString() %></p>
+            <p class="text-sm text-gray-700 mt-1">Priority: <%= goals.priority %></p>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  </main>
+</div>
+
+<script>
+// Intersection Observer to reveal elements on scroll
+const revealElements = document.querySelectorAll('.reveal');
+
+const observer = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('active');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+revealElements.forEach(el => {
+  observer.observe(el);
+});
+
+// Function to filter study plans by date and completion
+function filterPlans() {
+    const plans = document.querySelectorAll('.plan-item');
+    const now = new Date();
+
+    const dateFilter = document.getElementById('date-filter').value;
+    const completionFilter = document.getElementById('completion-filter').value;
+
+    plans.forEach(plan => {
+        const planDate = new Date(plan.dataset.date);
+        const isCompleted = plan.dataset.completed === 'true';
+        let show = true;
+
+        // Date filtering
+        if (dateFilter === 'week') {
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(now.getDate() - 7);
+            show = planDate >= oneWeekAgo;
+        } else if (dateFilter === 'month') {
+            const oneMonthAgo = new Date();
+            oneMonthAgo.setMonth(now.getMonth() - 1);
+            show = planDate >= oneMonthAgo;
+        } else if (dateFilter === 'year') {
+            const oneYearAgo = new Date();
+            oneYearAgo.setFullYear(now.getFullYear() - 1);
+            show = planDate >= oneYearAgo;
+        }
+
+        // Completion filtering
+        if (completionFilter === 'completed' && !isCompleted) {
+            show = false;
+        } else if (completionFilter === 'non-completed' && isCompleted) {
+            show = false;
+        }
+
+        plan.style.display = show ? 'block' : 'none';
+    });
+}
+</script>
 
 <%- include('./partials/footer') %>

@@ -6,23 +6,23 @@
     </span>
   </div>
 <% } %>
-<div class="container mx-auto p-4 mt-5 mb-5">
+<div class="container mx-auto p-4 mt-5 mb-5 reveal">
   <h2 class="text-2xl font-bold mb-4 text-center">Register</h2>
   <form action="/user/register" method="POST" class="max-w-md mx-auto bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4" >
     
-    <div class="mb-4">
+    <div class="mb-4 reveal">
       <label for="username" class="block text-gray-700">Username</label>
       <input type="text" name="username" id="username" class="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
     </div>
-    <div class="mb-4">
+    <div class="mb-4 reveal">
       <label class="block text-gray-700">Phone No</label>
       <input type="tel" name="phone_no" id="phone_no" class="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50"  required>
     </div>
-    <div class="mb-4">
+    <div class="mb-4 reveal">
       <label for="email" class="block text-gray-700">Email</label>
       <input type="email" name="email" id="email" class="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
     </div>
-    <div class="mb-4">
+    <div class="mb-4 reveal">
       <label for="password" class="block text-gray-700">Password</label>
       <input type="password" name="password" id="password" class="block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:ring focus:ring-blue-500 focus:ring-opacity-50" required>
     </div>
@@ -36,6 +36,25 @@
     
   </form>
 </div>
-<script src="/javaScrips/script.js"></script>
+<script>
+  // Intersection Observer to reveal elements on scroll
+  const revealElements = document.querySelectorAll('.reveal');
+  
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('active');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  
+  revealElements.forEach(el => {
+    observer.observe(el);
+  });
+  </script>
+  
+
+<script src="/javaScrips/script.js"></script> 
 
 

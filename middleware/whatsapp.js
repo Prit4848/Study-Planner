@@ -17,7 +17,7 @@ client.on('qr', (qr) => {
             console.error('Error generating QR code', err);
         } else {
             qrCodeImage = url;
-            console.log('QR Code Image URL:', qrCodeImage); // Log for debugging
+            // console.log('QR Code Image URL:', qrCodeImage); // Log for debugging
         }
     });
 });
