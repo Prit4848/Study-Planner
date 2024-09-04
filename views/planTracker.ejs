@@ -1,4 +1,5 @@
 <%- include('./partials/header') %>
+
 <div class="container mx-auto p-4 reveal">
   <h1 class="text-2xl font-bold mb-4">Study Plan Tracker</h1>
   
@@ -13,49 +14,76 @@
     </select>
   </div>
 
-  <div class="flex flex-wrap -mx-4 reveal">
-    <div class="w-full md:w-1/2 p-4">
-      <div class="bg-white p-4 rounded-lg shadow-md mt-32 reveal">
-        <canvas class="w-full h-screen" id="planChart"></canvas>
+  <!-- First Chart (Full Width) -->
+  <div class="mb-4 reveal">
+    <div class="bg-white p-4 rounded-lg shadow-md">
+      <canvas id="planChart"></canvas>
+    </div>
+  </div>
+
+  <!-- Second and Third Charts (Flex Row) -->
+  <div class="flex flex-col md:flex-row gap-4 reveal">
+    <div class="flex-1 p-4">
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <canvas id="completionPieChart"></canvas>
       </div>
     </div>
-    <div class="w-full md:w-1/2 p-4 reveal">
-      <div class="bg-white p-4 rounded-lg shadow-md reveal">
-        <canvas id="completionPieChart"></canvas>
+    <div class="flex-1 p-4">
+      <div class="bg-white p-4 rounded-lg shadow-md">
+        <div id="contributionChartContainer">
+          <div id="yearLabel" class="text-center font-bold mb-2"></div>
+          <div id="contributionChart" class="flex flex-wrap gap-1"></div>
+          <div id="colorLabels" class="mt-4"></div> <!-- Container for color labels -->
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     const ctxLine = document.getElementById('planChart').getContext('2d');
     const ctxPie = document.getElementById('completionPieChart').getContext('2d');
+    const contributionContainer = document.getElementById('contributionChart');
+    const colorLabelsContainer = document.getElementById('colorLabels');
+    const yearLabelContainer = document.getElementById('yearLabel');
     const plans = <%- JSON.stringify(plans) %>;
 
+    // Function to filter plans based on timeframe
     const filterPlans = (timeframe) => {
       const now = new Date();
-      return plans.filter(plan => {
-        const planDate = new Date(plan.date);
-        switch (timeframe) {
-          case 'week':
-            return planDate >= new Date(now.setDate(now.getDate() - 7));
-          case 'month':
-            return planDate >= new Date(now.setMonth(now.getMonth() - 1));
-          case 'year':
-            return planDate >= new Date(now.setFullYear(now.getFullYear() - 1));
-          default:
-            return true;
-        }
-      });
+      let startDate;
+      switch (timeframe) {
+        case 'week':
+          startDate = new Date(now);
+          startDate.setDate(now.getDate() - 7);
+          break;
+        case 'month':
+          startDate = new Date(now);
+          startDate.setMonth(now.getMonth() - 1);
+          break;
+        case 'year':
+          startDate = new Date(now);
+          startDate.setFullYear(now.getFullYear() - 1);
+          break;
+        default:
+          startDate = new Date(0); // Epoch
+      }
+      return plans.filter(plan => new Date(plan.date) >= startDate);
     };
 
+    // Function to format date
     const formatDate = (dateString) => {
       const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
       return new Date(dateString).toLocaleDateString(undefined, options);
     };
 
+    // Function to update all charts
     const updateCharts = (filteredPlans) => {
+      // Update Line Chart
       const labels = filteredPlans.map(plan => `${plan.title}\n${formatDate(plan.date)}`);
       const completionData = filteredPlans.map(plan => {
         const totalTasks = plan.tasks.length;
@@ -71,6 +99,7 @@
       planChart.data.datasets[0].pointBackgroundColor = lineColors;
       planChart.update();
 
+      // Update Pie Chart
       let totalTasks = 0;
       let completedTasks = 0;
       filteredPlans.forEach(plan => {
@@ -81,8 +110,12 @@
 
       completionPieChart.data.datasets[0].data = [completedTasks, notCompletedTasks];
       completionPieChart.update();
+
+      // Update Contribution Chart
+      updateContributionChart(filteredPlans);
     };
 
+    // Function to determine colors for the line chart
     const getColors = (data) => {
       const upColor = 'rgba(75, 192, 192, 1)'; // Green for ups
       const downColor = 'rgba(255, 99, 132, 1)'; // Red for downs
@@ -94,10 +127,71 @@
       return colors;
     };
 
+    // Function to update the contribution chart (current year only)
+    const updateContributionChart = (filteredPlans) => {
+      const contributionData = {};
+
+      // Count tasks completed per day
+      filteredPlans.forEach(plan => {
+        const planDate = new Date(plan.date);
+        if (planDate.getFullYear() === new Date().getFullYear()) {
+          const dateString = planDate.toDateString();
+          const completedTasks = plan.tasks.filter(task => task.completed).length;
+          contributionData[dateString] = (contributionData[dateString] || 0) + completedTasks;
+        }
+      });
+
+      const currentYear = new Date().getFullYear();
+      yearLabelContainer.textContent = currentYear; // Set year label text
+
+      const startOfYear = new Date(currentYear, 0, 1);
+      const days = Array.from({ length: 365 }, (_, i) => {
+        const date = new Date(startOfYear);
+        date.setDate(startOfYear.getDate() + i);
+        return date;
+      });
+
+      // Clear previous contribution chart
+      contributionContainer.innerHTML = '';
+
+      // Create grid of squares with 7 columns
+      days.forEach((date, index) => {
+        const completed = contributionData[date.toDateString()] || 0;
+        let color;
+        if (completed >= 7) {
+          color = '#196127'; // Dark green
+        } else if (completed >= 5) {
+          color = '#239a3b'; // Medium green
+        } else if (completed >= 1) {
+          color = '#7bc96f'; // Light green
+        } else {
+          color = '#ebedf0'; // White
+        }
+
+        const square = document.createElement('div');
+        square.style.width = '12px';
+        square.style.height = '12px';
+        square.style.backgroundColor = color;
+        square.style.margin = '1px';
+        square.title = `${date.toLocaleDateString()}: ${completed} tasks completed`;
+
+        contributionContainer.appendChild(square);
+      });
+
+      // Update color labels
+      colorLabelsContainer.innerHTML = `
+        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #196127; margin-right: 4px;"></span>7+ tasks</div>
+        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #239a3b; margin-right: 4px;"></span>5-6 tasks</div>
+        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #7bc96f; margin-right: 4px;"></span>1-4 tasks</div>
+        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #ebedf0; margin-right: 4px;"></span>0 tasks</div>
+      `;
+    };
+
+    // Line Chart Configuration
     const lineData = {
       labels: [],
       datasets: [{
-        label: 'Task Completion',
+        label: 'Task Completion (%)',
         data: [],
         backgroundColor: 'rgba(0, 0, 0, 0)',
         borderColor: [],
@@ -137,11 +231,12 @@
 
     const planChart = new Chart(ctxLine, lineConfig);
 
+    // Pie Chart Configuration
     const pieData = {
       labels: ['Completed', 'Not Completed'],
       datasets: [{
         data: [],
-        backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)'],
+        backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
         borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
         borderWidth: 1
       }]
@@ -158,7 +253,7 @@
                 const label = context.label || '';
                 const value = context.raw;
                 const total = context.chart._metasets[context.datasetIndex].total;
-                const percentage = ((value / total) * 100).toFixed(2);
+                const percentage = total ? ((value / total) * 100).toFixed(2) : '0.00';
                 return `${label}: ${percentage}% (${value})`;
               }
             }
@@ -179,6 +274,7 @@
     });
   });
 </script>
+
 <script>
   // Intersection Observer to reveal elements on scroll
   const revealElements = document.querySelectorAll('.reveal');

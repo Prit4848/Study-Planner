@@ -23,6 +23,12 @@ const taskSchema = new mongoose.Schema({
     default: false
   },
   reminderJobId: { type: String }
+
+});
+const attachmentSchema = new mongoose.Schema({
+  filename: String,
+  data: Buffer,  
+  contentType: String
 });
 
 const planSchema = new mongoose.Schema({
@@ -44,12 +50,15 @@ const planSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
+  Attachment: {
+    type: attachmentSchema,
+    default: () => ({})
+  },
   tasks: [taskSchema],
   createdAt: {
     type: Date,
     default: Date.now
   }
- 
 });
 
 module.exports = mongoose.model('Plan', planSchema);

@@ -4,7 +4,6 @@ const cookieparser = require("cookie-parser")
 const bodyParser = require("body-parser")
 const path = require("path")
 const punycode = require('punycode/');
-// const { reverse } = require("dns");
 const session = require('express-session');
 const flash = require('connect-flash');
 

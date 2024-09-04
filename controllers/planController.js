@@ -3,9 +3,10 @@ const jwt = require("jsonwebtoken");
 const { generateToken } = require("../utils/generateTokens");
 const planModel = require("../models/plan-model")
 const userModel = require("../models/user-model")
-const twilio = require('twilio');
 const cron = require('node-cron');
 const { client }= require("../middleware/whatsapp")
+const fs = require('fs');
+const path = require('path');
 
 const accountSid = process.env.SID; 
 const authToken = process.env.SID_TOKEN; 
@@ -25,62 +26,66 @@ module.exports.createPlans =async function(req,res){
     }
 }
 
-module.exports.postcreatePlans = async function(req,res){
+module.exports.postcreatePlans = async function(req, res) {
     try {
         const { title, description, date, tasks } = req.body;
-        
-        
-        const user = await userModel.findOne({_id:req.user})
-       
-        
+        const Attachment = req.file; // File is available as a buffer in memory
+        const user = await userModel.findOne({ _id: req.user });
+
         if (!user) {
-          return res.status(404).send("User not found");
+            return res.status(404).send("User not found");
         }
-    
+
         const today = new Date();
         const todayDateString = today.toDateString();
         const lastPlanDateString = user.lastPlanDate ? user.lastPlanDate.toDateString() : null;
-    
-        // if (lastPlanDateString === todayDateString) {
-        //   // User has already created a plan today
-        //   return res.redirect('/dashboard');
-        // }
-    
-        if (lastPlanDateString || new Date(lastPlanDateString).getTime() === (new Date(today).getTime() - 86400000)) {
-          user.streak += 1; // Increment streak if the last plan was created yesterday
+
+        if (lastPlanDateString === todayDateString || new Date(lastPlanDateString).getTime() === (new Date(today).getTime() - 86400000)) {
+            user.streak = (lastPlanDateString === todayDateString) ? user.streak : user.streak + 1;
         } else {
-          user.streak = 1; // Reset streak if not consecutive days
+            user.streak = 1;
         }
-    
+
         user.lastPlanDate = today;
-        
-        // Ensure tasks is defined and is an array
+
         if (!tasks || !Array.isArray(tasks)) {
             return res.status(400).send("Tasks are required and should be an array");
         }
-    
-        const plan = await planModel.create({
+
+        // Prepare plan data
+        const planData = {
             userId: user._id,
             title,
             description,
             date,
-            tasks: tasks.map((task) => ({
+            tasks: tasks.map(task => ({
                 title: task.title,
                 description: task.description,
                 startTime: task.startTime,
                 endTime: task.endTime
             }))
-        });
-    
-        await plan.save();
+        };
+
+        // Handle attachment
+        if (Attachment) {
+            planData.Attachment = {
+                filename: Attachment.originalname,
+                data: Attachment.buffer,  // Store the buffer data
+                contentType: Attachment.mimetype
+            };
+        }
+
+        // Create the plan
+        const plan = await planModel.create(planData);
         await user.save();
+
         res.render("viewPlan", { plan, user });
-      } catch (err) {
+        
+    } catch (err) {
         console.error(err);
         res.status(500).send("Internal server error");
-      }
+    }
 }
-
 module.exports.postPlancheck =async function(req,res){
     try {
         const plan = await planModel.findOne({_id:req.params.planid,userId:req.params.userid});;
@@ -217,3 +222,20 @@ module.exports.setReminder = async function(req, res) {
         console.log(err);
     }
 };
+
+//show Pdf
+
+module.exports.attachment = async (req,res)=>{
+    try {
+        let plan = await planModel.findById(req.params.planId);
+        if (!plan || !plan.Attachment) {
+            return res.status(404).send('Attachment not found');
+        }
+
+        res.contentType(plan.Attachment.contentType);
+        res.send(plan.Attachment.data.buffer);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send('Internal server error');
+    }
+}

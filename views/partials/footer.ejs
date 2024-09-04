@@ -1,35 +1,35 @@
-<div class="w-full min-h-screen flex items-center justify-center bg-blue-500">
-  <div class="md:w-2/3 w-full px-4 text-white flex flex-col animate-fade-in">
-      <div class="w-full text-7xl font-bold animate-slide-in-left">
-          <h1 class="w-full md:w-2/3">How can we help you. get in touch</h1>
+<div class="w-full min-h-screen flex items-center justify-center bg-blue-500 p-4">
+  <div class="md:w-2/3 w-full text-white flex flex-col animate-fade-in">
+      <div class="w-full text-5xl md:text-7xl font-bold animate-slide-in-left">
+          <h1 class="w-full md:w-2/3">How can we help you? Get in touch</h1>
       </div>
       <div class="flex mt-8 flex-col md:flex-row md:justify-between">
           <p class="w-full md:w-2/3 text-gray-300 animate-slide-in-right">Any query? Contact us and ask. We will reach a solution as soon as possible.</p>
-          <div class="w-44 pt-6 md:pt-0 animate-bounce">
-              <a href="/contactUs" class="bg-red-500 justify-center text-center rounded-lg shadow px-10 py-3 flex items-center hover:animate-pulse">Contact Us</a>
+          <div class="w-full md:w-44 pt-6 md:pt-0 animate-bounce flex justify-center md:justify-end">
+              <a href="/contactUs" class="bg-red-500 text-center rounded-lg shadow px-10 py-3 flex items-center justify-center hover:animate-pulse">Contact Us</a>
           </div>
       </div>
-      <div class="flex flex-row gap-28 m-10 mt-10 mb-10 animate-fade-in">
-          <a href="/aboutUs" class="hidden md:block cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">About</a>
-          <a href="/services" class="hidden md:block cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">Features</a>
-          <a href="/whyUs" class="hidden md:block cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">Why Us</a>
-          <a href="/contactUs" class="hidden md:block cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">Contact</a>
-          <div class="flex flex-row space-x-8 items-center justify-between">
-              <!-- Social media icons remain the same -->
-          </div>
+      <div class="flex flex-col md:flex-row gap-6 md:gap-28 mt-10 mb-10 animate-fade-in">
+          <a href="/aboutUs" class="cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">About</a>
+          <a href="/services" class="cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">Features</a>
+          <a href="/whyUs" class="cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">Why Us</a>
+          <a href="/support" class="cursor-pointer text-gray-300 hover:text-white uppercase hover:animate-pulse">Support</a>
       </div>
-      <hr class="border-gray-600"/>
-      <p class="w-full text-center my-12 text-gray-300 animate-slide-in-up">Copyright © 2020 Study Planner</p>
+      <div class="flex justify-center md:justify-between items-center space-x-8">
+          <!-- Social media icons will go here -->
+      </div>
+      <hr class="border-gray-600 my-4"/>
+      <p class="w-full text-center text-sm md:text-base text-gray-300 animate-slide-in-up">Copyright © 2020 Study Planner</p>
   </div>
 </div>
-<!-- // this is for image dropdown -->
-  <script>
-    function toggleDropdown() {
+
+<!-- JavaScript remains the same -->
+<script>
+  function toggleDropdown() {
     const dropdown = document.getElementById('user-dropdown');
     dropdown.classList.toggle('hidden');
   }
 
-  // Close the dropdown if the user clicks outside of it
   window.onclick = function(event) {
     if (!event.target.closest('#user-menu-button')) {
       const dropdown = document.getElementById('user-dropdown');
@@ -38,9 +38,8 @@
       }
     }
   }
-  </script>
+</script>
 
-<!-- //this is for home page and dashboard button -->
 <script>
   document.addEventListener('DOMContentLoaded', function() {
       var currentUrl = window.location.pathname;
@@ -59,6 +58,6 @@
   });
 </script>
   
-  <script src="/javaScrips/script.js"></script>
+<script src="/javaScrips/script.js"></script>
 </body>
 </html>

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "planner":"nodemon app.js"
+    "planner": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +21,7 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "flowbite": "^2.4.1",
+    "fs": "^0.0.1-security",
     "fstream": "^1.0.12",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.5.0",
@@ -28,6 +29,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.14",
     "nodemon": "^3.1.4",
+    "path": "^0.12.7",
     "punycode": "^2.3.1",
     "qrcode": "^1.5.3",
     "qrcode-terminal": "^0.12.0",
