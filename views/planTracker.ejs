@@ -1,12 +1,12 @@
 <%- include('./partials/header') %>
 
-<div class="container mx-auto p-4 reveal">
-  <h1 class="text-2xl font-bold mb-4">Study Plan Tracker</h1>
+<div class="container mx-auto p-6 reveal">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Visualization</h1>
   
   <!-- Dropdown Menu for Time Filter -->
-  <div class="mb-4">
-    <label for="timeFilter" class="mr-2">Filter by:</label>
-    <select id="timeFilter" class="border border-gray-300 p-2 rounded">
+  <div class="mb-6 flex  items-center">
+    <label for="timeFilter" class="mr-3 text-lg font-semibold text-gray-700">Filter by:</label>
+    <select id="timeFilter" class="border border-gray-400 p-3 rounded-lg shadow-md text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300 ease-in-out">
       <option value="all">All Time</option>
       <option value="week">One Week</option>
       <option value="month">One Month</option>
@@ -15,25 +15,25 @@
   </div>
 
   <!-- First Chart (Full Width) -->
-  <div class="mb-4 reveal">
-    <div class="bg-white p-4 rounded-lg shadow-md">
-      <canvas id="planChart"></canvas>
+  <div class="mb-8 reveal">
+    <div class="bg-white p-6 rounded-xl shadow-lg">
+      <canvas id="planChart" class="w-full h-96"></canvas>
     </div>
   </div>
 
   <!-- Second and Third Charts (Flex Row) -->
-  <div class="flex flex-col md:flex-row gap-4 reveal">
+  <div class="flex flex-col md:flex-row gap-6 reveal">
     <div class="flex-1 p-4">
-      <div class="bg-white p-4 rounded-lg shadow-md">
-        <canvas id="completionPieChart"></canvas>
+      <div class="bg-white p-6 rounded-xl shadow-lg">
+        <canvas id="completionPieChart" class="w-full h-80"></canvas>
       </div>
     </div>
     <div class="flex-1 p-4">
-      <div class="bg-white p-4 rounded-lg shadow-md">
+      <div class="bg-white p-6 rounded-xl shadow-lg">
         <div id="contributionChartContainer">
-          <div id="yearLabel" class="text-center font-bold mb-2"></div>
-          <div id="contributionChart" class="flex flex-wrap gap-1"></div>
-          <div id="colorLabels" class="mt-4"></div> <!-- Container for color labels -->
+          <div id="yearLabel" class="text-center font-bold text-lg mb-4 text-gray-700"></div>
+          <div id="contributionChart" class="flex flex-wrap gap-1 justify-center"></div>
+          <div id="colorLabels" class="mt-6 flex justify-center gap-4 text-sm text-gray-600"></div>
         </div>
       </div>
     </div>
@@ -45,234 +45,250 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    const ctxLine = document.getElementById('planChart').getContext('2d');
-    const ctxPie = document.getElementById('completionPieChart').getContext('2d');
-    const contributionContainer = document.getElementById('contributionChart');
-    const colorLabelsContainer = document.getElementById('colorLabels');
-    const yearLabelContainer = document.getElementById('yearLabel');
-    const plans = <%- JSON.stringify(plans) %>;
+  // Get canvas contexts
+  const ctxLine = document.getElementById('planChart')?.getContext('2d');
+  const ctxPie = document.getElementById('completionPieChart')?.getContext('2d');
+  const contributionContainer = document.getElementById('contributionChart');
+  const colorLabelsContainer = document.getElementById('colorLabels');
+  const yearLabelContainer = document.getElementById('yearLabel');
+  const timeFilter = document.getElementById('timeFilter');
+  
+  if (!ctxLine || !ctxPie || !contributionContainer || !colorLabelsContainer || !yearLabelContainer || !timeFilter) {
+    console.error('One or more elements are missing or not properly referenced in the DOM.');
+    return;
+  }
 
-    // Function to filter plans based on timeframe
-    const filterPlans = (timeframe) => {
-      const now = new Date();
-      let startDate;
-      switch (timeframe) {
-        case 'week':
-          startDate = new Date(now);
-          startDate.setDate(now.getDate() - 7);
-          break;
-        case 'month':
-          startDate = new Date(now);
-          startDate.setMonth(now.getMonth() - 1);
-          break;
-        case 'year':
-          startDate = new Date(now);
-          startDate.setFullYear(now.getFullYear() - 1);
-          break;
-        default:
-          startDate = new Date(0); // Epoch
-      }
-      return plans.filter(plan => new Date(plan.date) >= startDate);
-    };
+  const plans = <%- JSON.stringify(plans) %>;
+  
+  if (!Array.isArray(plans)) {
+    console.error('`plans` is not an array or is not properly passed from the server.');
+    return;
+  }
 
-    // Function to format date
-    const formatDate = (dateString) => {
-      const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-      return new Date(dateString).toLocaleDateString(undefined, options);
-    };
+  // Function to filter plans based on timeframe
+  const filterPlans = (timeframe) => {
+    const now = new Date();
+    let startDate;
+    switch (timeframe) {
+      case 'week':
+        startDate = new Date(now);
+        startDate.setDate(now.getDate() - 7);
+        break;
+      case 'month':
+        startDate = new Date(now);
+        startDate.setMonth(now.getMonth() - 1);
+        break;
+      case 'year':
+        startDate = new Date(now);
+        startDate.setFullYear(now.getFullYear() - 1);
+        break;
+      default:
+        startDate = new Date(0); // Epoch
+    }
+    return plans.filter(plan => new Date(plan.date) >= startDate);
+  };
 
-    // Function to update all charts
-    const updateCharts = (filteredPlans) => {
-      // Update Line Chart
-      const labels = filteredPlans.map(plan => `${plan.title}\n${formatDate(plan.date)}`);
-      const completionData = filteredPlans.map(plan => {
-        const totalTasks = plan.tasks.length;
-        const completedTasks = plan.tasks.filter(task => task.completed).length;
-        return totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-      });
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
 
-      const lineColors = getColors(completionData);
-
-      planChart.data.labels = labels;
-      planChart.data.datasets[0].data = completionData;
-      planChart.data.datasets[0].borderColor = lineColors;
-      planChart.data.datasets[0].pointBackgroundColor = lineColors;
-      planChart.update();
-
-      // Update Pie Chart
-      let totalTasks = 0;
-      let completedTasks = 0;
-      filteredPlans.forEach(plan => {
-        totalTasks += plan.tasks.length;
-        completedTasks += plan.tasks.filter(task => task.completed).length;
-      });
-      const notCompletedTasks = totalTasks - completedTasks;
-
-      completionPieChart.data.datasets[0].data = [completedTasks, notCompletedTasks];
-      completionPieChart.update();
-
-      // Update Contribution Chart
-      updateContributionChart(filteredPlans);
-    };
-
-    // Function to determine colors for the line chart
-    const getColors = (data) => {
-      const upColor = 'rgba(75, 192, 192, 1)'; // Green for ups
-      const downColor = 'rgba(255, 99, 132, 1)'; // Red for downs
-      const colors = [];
-      for (let i = 1; i < data.length; i++) {
-        colors.push(data[i] >= data[i - 1] ? upColor : downColor);
-      }
-      colors.unshift(upColor); // Initial point color
-      return colors;
-    };
-
-    // Function to update the contribution chart (current year only)
-    const updateContributionChart = (filteredPlans) => {
-      const contributionData = {};
-
-      // Count tasks completed per day
-      filteredPlans.forEach(plan => {
-        const planDate = new Date(plan.date);
-        if (planDate.getFullYear() === new Date().getFullYear()) {
-          const dateString = planDate.toDateString();
-          const completedTasks = plan.tasks.filter(task => task.completed).length;
-          contributionData[dateString] = (contributionData[dateString] || 0) + completedTasks;
-        }
-      });
-
-      const currentYear = new Date().getFullYear();
-      yearLabelContainer.textContent = currentYear; // Set year label text
-
-      const startOfYear = new Date(currentYear, 0, 1);
-      const days = Array.from({ length: 365 }, (_, i) => {
-        const date = new Date(startOfYear);
-        date.setDate(startOfYear.getDate() + i);
-        return date;
-      });
-
-      // Clear previous contribution chart
-      contributionContainer.innerHTML = '';
-
-      // Create grid of squares with 7 columns
-      days.forEach((date, index) => {
-        const completed = contributionData[date.toDateString()] || 0;
-        let color;
-        if (completed >= 7) {
-          color = '#196127'; // Dark green
-        } else if (completed >= 5) {
-          color = '#239a3b'; // Medium green
-        } else if (completed >= 1) {
-          color = '#7bc96f'; // Light green
-        } else {
-          color = '#ebedf0'; // White
-        }
-
-        const square = document.createElement('div');
-        square.style.width = '12px';
-        square.style.height = '12px';
-        square.style.backgroundColor = color;
-        square.style.margin = '1px';
-        square.title = `${date.toLocaleDateString()}: ${completed} tasks completed`;
-
-        contributionContainer.appendChild(square);
-      });
-
-      // Update color labels
-      colorLabelsContainer.innerHTML = `
-        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #196127; margin-right: 4px;"></span>7+ tasks</div>
-        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #239a3b; margin-right: 4px;"></span>5-6 tasks</div>
-        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #7bc96f; margin-right: 4px;"></span>1-4 tasks</div>
-        <div><span style="display: inline-block; width: 12px; height: 12px; background-color: #ebedf0; margin-right: 4px;"></span>0 tasks</div>
-      `;
-    };
-
-    // Line Chart Configuration
-    const lineData = {
-      labels: [],
-      datasets: [{
-        label: 'Task Completion (%)',
-        data: [],
-        backgroundColor: 'rgba(0, 0, 0, 0)',
-        borderColor: [],
-        borderWidth: 2,
-        pointBackgroundColor: [],
-        fill: false,
-        tension: 0.1
-      }]
-    };
-
-    const lineConfig = {
-      type: 'line',
-      data: lineData,
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-            max: 100,
-            ticks: {
-              callback: function(value) {
-                return value + '%';
-              }
-            }
-          }
-        },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                return context.parsed.y.toFixed(2) + '%';
-              }
-            }
-          }
-        }
-      }
-    };
-
-    const planChart = new Chart(ctxLine, lineConfig);
-
-    // Pie Chart Configuration
-    const pieData = {
-      labels: ['Completed', 'Not Completed'],
-      datasets: [{
-        data: [],
-        backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)'],
-        borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
-        borderWidth: 1
-      }]
-    };
-
-    const pieConfig = {
-      type: 'pie',
-      data: pieData,
-      options: {
-        plugins: {
-          tooltip: {
-            callbacks: {
-              label: function(context) {
-                const label = context.label || '';
-                const value = context.raw;
-                const total = context.chart._metasets[context.datasetIndex].total;
-                const percentage = total ? ((value / total) * 100).toFixed(2) : '0.00';
-                return `${label}: ${percentage}% (${value})`;
-              }
-            }
-          }
-        }
-      }
-    };
-
-    const completionPieChart = new Chart(ctxPie, pieConfig);
-
-    // Initialize with all time filter
-    updateCharts(plans);
-
-    // Event listener for dropdown change
-    document.getElementById('timeFilter').addEventListener('change', (e) => {
-      const filteredPlans = filterPlans(e.target.value);
-      updateCharts(filteredPlans);
+  const updateCharts = (filteredPlans) => {
+    const labels = filteredPlans.map(plan => `${plan.title}\n${formatDate(plan.date)}`);
+    const completionData = filteredPlans.map(plan => {
+      const totalTasks = plan.tasks.length;
+      const completedTasks = plan.tasks.filter(task => task.completed).length;
+      return totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
     });
+
+    const lineColors = getColors(completionData);
+
+    planChart.data.labels = labels;
+    planChart.data.datasets[0].data = completionData;
+    planChart.data.datasets[0].borderColor = lineColors;
+    planChart.data.datasets[0].pointBackgroundColor = lineColors;
+    planChart.update();
+
+    let totalTasks = 0;
+    let completedTasks = 0;
+    filteredPlans.forEach(plan => {
+      totalTasks += plan.tasks.length;
+      completedTasks += plan.tasks.filter(task => task.completed).length;
+    });
+    const notCompletedTasks = totalTasks - completedTasks;
+
+    completionPieChart.data.datasets[0].data = [completedTasks, notCompletedTasks];
+    completionPieChart.update();
+
+    updateContributionChart(filteredPlans);
+  };
+
+  const getColors = (data) => {
+    const upColor = 'rgba(75, 192, 192, 1)';
+    const downColor = 'rgba(255, 99, 132, 1)';
+    const colors = [];
+    for (let i = 1; i < data.length; i++) {
+      colors.push(data[i] >= data[i - 1] ? upColor : downColor);
+    }
+    colors.unshift(upColor);
+    return colors;
+  };
+
+  const updateContributionChart = (filteredPlans) => {
+    const contributionData = {};
+
+    filteredPlans.forEach(plan => {
+      const planDate = new Date(plan.date);
+      if (planDate.getFullYear() === new Date().getFullYear()) {
+        const dateString = planDate.toDateString();
+        const completedTasks = plan.tasks.filter(task => task.completed).length;
+        contributionData[dateString] = (contributionData[dateString] || 0) + completedTasks;
+      }
+    });
+
+    const currentYear = new Date().getFullYear();
+    yearLabelContainer.textContent = currentYear;
+
+    const startOfYear = new Date(currentYear, 0, 1);
+    const days = Array.from({ length: 365 }, (_, i) => {
+      const date = new Date(startOfYear);
+      date.setDate(startOfYear.getDate() + i);
+      return date;
+    });
+
+    contributionContainer.innerHTML = '';
+
+    const monthLabelsContainer = document.createElement('div');
+    monthLabelsContainer.classList.add('flex', 'justify-between', 'w-full', 'mb-2', 'text-sm', 'text-gray-700');
+    contributionContainer.appendChild(monthLabelsContainer);
+
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    months.forEach((month, index) => {
+      const monthLabel = document.createElement('div');
+      monthLabel.textContent = month;
+      monthLabel.style.width = `${(365 / 12) - 1}px`;
+      monthLabel.classList.add('text-center');
+      monthLabelsContainer.appendChild(monthLabel);
+    });
+
+    days.forEach((date, index) => {
+      const completed = contributionData[date.toDateString()] || 0;
+      let color;
+      if (completed >= 7) {
+        color = '#196127';
+      } else if (completed >= 5) {
+        color = '#239a3b';
+      } else if (completed >= 1) {
+        color = '#7bc96f';
+      } else {
+        color = '#ebedf0';
+      }
+
+      const square = document.createElement('div');
+      square.classList.add('rounded-sm', 'transition-all', 'hover:scale-105', 'hover:shadow-md');
+      square.style.width = '12px';
+      square.style.height = '12px';
+      square.style.backgroundColor = color;
+      square.style.margin = '1px';
+      square.title = `${date.toLocaleDateString()}: ${completed} tasks completed`;
+
+      contributionContainer.appendChild(square);
+    });
+
+    colorLabelsContainer.innerHTML = `
+      <div><span class="inline-block w-4 h-4 rounded-sm" style="background-color: #196127;"></span>7+ tasks</div>
+      <div><span class="inline-block w-4 h-4 rounded-sm" style="background-color: #239a3b;"></span>5-6 tasks</div>
+      <div><span class="inline-block w-4 h-4 rounded-sm" style="background-color: #7bc96f;"></span>1-4 tasks</div>
+      <div><span class="inline-block w-4 h-4 rounded-sm" style="background-color: #ebedf0;"></span>0 tasks</div>
+    `;
+  };
+
+  const lineData = {
+    labels: [],
+    datasets: [{
+      label: 'Task Completion (%)',
+      data: [],
+      backgroundColor: 'rgba(0, 0, 0, 0)',
+      borderColor: [],
+      borderWidth: 3,
+      pointBackgroundColor: [],
+      fill: false,
+      tension: 0.4
+    }]
+  };
+
+  const lineConfig = {
+    type: 'line',
+    data: lineData,
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true,
+          max: 100,
+          ticks: {
+            callback: function(value) {
+              return value + '%';
+            }
+          }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              return context.parsed.y.toFixed(2) + '%';
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const planChart = new Chart(ctxLine, lineConfig);
+
+  const pieData = {
+    labels: ['Completed', 'Not Completed'],
+    datasets: [{
+      data: [],
+      backgroundColor: ['rgba(75, 192, 192, 0.8)', 'rgba(255, 99, 132, 0.8)'],
+      borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)'],
+      borderWidth: 2
+    }]
+  };
+
+  const pieConfig = {
+    type: 'pie',
+    data: pieData,
+    options: {
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const label = context.label || '';
+              const value = context.raw;
+              const total = context.chart._metasets[context.datasetIndex].total;
+              const percentage = total ? ((value / total) * 100).toFixed(2) : '0.00';
+              return `${label}: ${percentage}% (${value})`;
+            }
+          }
+        }
+      }
+    }
+  };
+
+  const completionPieChart = new Chart(ctxPie, pieConfig);
+
+  // Initialize with all time filter
+  updateCharts(plans);
+
+  // Event listener for dropdown change
+  timeFilter.addEventListener('change', (e) => {
+    const filteredPlans = filterPlans(e.target.value);
+    updateCharts(filteredPlans);
   });
+});
+
 </script>
 
 <script>

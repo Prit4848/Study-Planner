@@ -11,7 +11,6 @@ const client = new Client({
 });
 
 client.on('qr', (qr) => {
-    console.log('QR RECEIVED', qr);
     qrcode.toDataURL(qr, (err, url) => {
         if (err) {
             console.error('Error generating QR code', err);

@@ -125,4 +125,12 @@ router.get("/whyUs",(req,res)=>{    // why us get page
     }
 })
 
+router.get("/support",(req,res)=>{
+    try {
+        res.render("support",{user:false})
+    } catch (error) {
+        console.log(error)
+    }
+})
+
 module.exports = router;

@@ -7,26 +7,34 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/styleSheets/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   
-    
+    <script src="/javaScrips/script.js"></script>
 </head>
-<body id="body"  class= bg-gray-100 min-h-screen" >
+<body id="body" class="bg-gray-100 min-h-screen">
   <header class="bg-blue-500 p-2 text-white shadow-md">
     <div class="container mx-auto flex justify-between items-center">
-      <img class="w-12 h-12 border border-collapse object-fit:cover" src="/images/plan logo.png" alt="">
-      
-      <nav class="space-x-4 flex mt-2 mb-2">
-        
+      <img class="w-12 h-12 border border-collapse object-cover" src="/images/plan logo.png" alt="">
+
+      <!-- Hamburger menu for mobile -->
+      <div class="lg:hidden">
+        <button id="menu-toggle" class="focus:outline-none">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Navigation menu -->
+      <nav id="nav-menu" class="hidden flex-col lg:flex lg:flex-row space-y-4 lg:space-y-0 lg:space-x-4 mt-2 mb-2">
         <% var isloggedin = typeof isloggedin !== "undefined" ? isloggedin : true; %>
         <% if (isloggedin) { %>
           <% if (typeof user !== 'undefined' && user._id) { %>
-            <div class="mt-2">
-              <a id="home-button" href="/home" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300 ease-in-out">Home</a>
+            <div class="">
+              <a id="home-button" href="/home" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300 ease-in-out block">Home</a>
             </div>
             <div class="mt-2">
-              <a id="dashboard-button" href="/dashboard" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300 ease-in-out">Dashboard</a>
+              <a id="dashboard-button" href="/dashboard" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-gray-400 transition duration-300 ease-in-out block">Dashboard</a>
             </div>
-            <div class="relative ml-3">
+            <div class="relative mt-2 ml-3">
               <div>
                 <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown()">
                   <span class="sr-only">Open user menu</span>
@@ -40,22 +48,19 @@
               <!-- Dropdown menu -->
               <div class="absolute right-0 z-50 mt-1 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="user-dropdown" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                 <a href="/Profile/<%= user._id %>" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Your Profile</a>
-                <a href="/planTracker" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Progress Tracking</a>
+                <a href="/planTracker" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">Visualization</a>
                 <a href="/Account/<%= user._id %>" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">Settings</a>
                 <a href="/user/logout" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-2">Logout</a>
               </div>
             </div>
           <% } %>
-          
         <% } %>
         <% if(typeof user == 'undefined'){ %>
-          <div class="flex justify-center ">
-  
-            <a href="/user/register" class="bg-blue-600 hover:bg-gray-400 text-white py-2 px-4 rounded-md mr-4 transition duration-300">Register</a>
-            <a href="/user/login" class="bg-green-600 hover:bg-gray-400 text-white py-2 px-4 rounded-md transition duration-300">Login</a>
-         
-        </div>
-          <% } %>
+          <div class="flex justify-center mt-2">
+            <a href="/user/register" class="bg-blue-600 hover:bg-gray-400 text-white py-2 px-4 rounded-md mr-4 transition duration-300 block">Register</a>
+            <a href="/user/login" class="bg-green-600 hover:bg-gray-400 text-white py-2 px-4 rounded-md transition duration-300 block">Login</a>
+          </div>
+        <% } %>
       </nav>
     </div>
   </header>

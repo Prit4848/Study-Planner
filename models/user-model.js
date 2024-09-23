@@ -29,10 +29,9 @@ const userSchema = mongoose.Schema({
       },
       image:{
       type:  Buffer,
-      
       },
       Background_image:{
-        type:  Buffer, 
+        type: Buffer, 
         },
       Bio:String,
       streak: {

@@ -1,45 +1,45 @@
 <%- include('./partials/header') %>
 
 <div class="container mx-auto p-4 relative z-10 reveal">
-  <h1 class="text-4xl text-center mt-8 text-black animate-3d">Welcome to Study Planner</h1>
+  <h1 class="text-2xl sm:text-3xl md:text-4xl text-center mt-8 text-black animate-typing">Welcome to Study Planner</h1>
 </div>
 
 <!-- Features Section -->
 <div class="container mx-auto p-4 mt-10 reveal">
-    <h2 class="text-3xl font-bold text-center text-blue-600">Features</h2>
+    <h2 class="text-2xl sm:text-3xl font-bold text-center text-blue-600">Features</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-6 reveal">
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center animate-hover-3d">
-        <img src="/images/organized_1.jpeg" alt="Feature 1" class="mx-auto mb-4 w-16 h-16">
-        <a href="/h-oraganize-shedule" class="text-xl font-semibold text-gray-800">Organize Your Schedule</a>
-        <p class="text-gray-600 mt-2">Easily organize and manage your study schedule.</p>
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center animate-hover-3d">
+        <img src="/images/organized_1.jpeg" alt="Feature 1" class="mx-auto mb-4 w-12 h-12 sm:w-16 sm:h-16">
+        <a href="/h-oraganize-shedule" class="text-lg sm:text-xl font-semibold text-gray-800">Organize Your Schedule</a>
+        <p class="text-sm sm:text-base text-gray-600 mt-2">Easily organize and manage your study schedule.</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
-        <img src="/images/track_1.jpeg" alt="Feature 2" class="mx-auto mb-4 w-16 h-16">
-        <a href="/h-tracking-progress" class="text-xl font-semibold text-gray-800">Track Your Progress</a>
-        <p class="text-gray-600 mt-2">Monitor your progress and stay motivated.</p>
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
+        <img src="/images/track_1.jpeg" alt="Feature 2" class="mx-auto mb-4 w-12 h-12 sm:w-16 sm:h-16">
+        <a href="/h-tracking-progress" class="text-lg sm:text-xl font-semibold text-gray-800">Track Your Progress</a>
+        <p class="text-sm sm:text-base text-gray-600 mt-2">Monitor your progress and stay motivated.</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
-        <img src="/images/goals_1.jpeg" alt="Feature 3" class="mx-auto mb-4 w-16 h-16">
-        <a href="/h-oraganize-golal" class="text-xl font-semibold text-gray-800">Organize Your Goals</a>
-        <p class="text-gray-600 mt-2">Set and organize your study goals effectively.</p>
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
+        <img src="/images/goals_1.jpeg" alt="Feature 3" class="mx-auto mb-4 w-12 h-12 sm:w-16 sm:h-16">
+        <a href="/h-oraganize-golal" class="text-lg sm:text-xl font-semibold text-gray-800">Organize Your Goals</a>
+        <p class="text-sm sm:text-base text-gray-600 mt-2">Set and organize your study goals effectively.</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
-        <img src="/images/alert_1.jpeg" alt="Feature 4" class="mx-auto mb-4 w-16 h-16">
-        <a href="/h-personalize-alert" class="text-xl font-semibold text-gray-800">Personalize Alerts</a>
-        <p class="text-gray-600 mt-2">Set personalized alerts to never miss a study session.</p>
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
+        <img src="/images/alert_1.jpeg" alt="Feature 4" class="mx-auto mb-4 w-12 h-12 sm:w-16 sm:h-16">
+        <a href="/h-personalize-alert" class="text-lg sm:text-xl font-semibold text-gray-800">Personalize Alerts</a>
+        <p class="text-sm sm:text-base text-gray-600 mt-2">Set personalized alerts to never miss a study session.</p>
       </div>
     </div>
 </div>
 
 <!-- Testimonials Section -->
 <div class="container mx-auto p-4 mt-10">
-    <h2 class="text-3xl font-bold text-center text-blue-600 reveal">Testimonials</h2>
+    <h2 class="text-2xl sm:text-3xl font-bold text-center text-blue-600 reveal">Testimonials</h2>
     <div class="mt-6 reveal">
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center animate-hover-3d reveal">
         <p class="text-gray-800 italic">"Study Planner has completely transformed the way I study. It's a game-changer!"</p>
         <p class="mt-4 text-gray-600">- Chirag Surati</p>
       </div>
-      <div class="bg-white p-6 rounded-lg shadow-lg text-center mt-6 animate-hover-3d reveal">
+      <div class="bg-white p-4 sm:p-6 rounded-lg shadow-lg text-center mt-6 animate-hover-3d reveal">
         <p class="text-gray-800 italic">"I love the simplicity and effectiveness of Study Planner. Highly recommend it!"</p>
         <p class="mt-4 text-gray-600">- Ashish Patel</p>
       </div>
@@ -62,6 +62,6 @@
   revealElements.forEach(el => {
     observer.observe(el);
   });
-  </script>
-  
-  <%- include('./partials/footer') %>
+</script>
+
+<%- include('./partials/footer') %>

@@ -10,14 +10,15 @@
         <div class="mt-4 reveal">
           <h3 class="text-xl font-semibold mb-2">Attachment</h3>
           <% if (plan.Attachment.contentType.startsWith('image/')) { %>
-            <img src="/plan/<%= plan._id %>/attachment" alt="Attachment" class="w-full h-auto rounded-md mt-2">
+            <img src="data:image/png;base64,<%= plan.Attachment.toString('base64') %>" alt="Attachment" class="w-full h-auto rounded-md mt-2">
           <% } else if (plan.Attachment.contentType === 'application/pdf') { %>
-            <embed src="data:application/pdf;base64,<%= plan.Attachment.data.toString('base64') %>" type="application/pdf" width="100%" height="600px" />
+            <embed src="data:application/pdf;base64,<%= plan.Attachment.data.toString('base64') %>" type="application/pdf" class="w-full h-[400px] md:h-[600px]" />
           <% } else { %>
             <a href="/plan/<%= plan._id %>/attachment" class="text-blue-500 hover:underline" target="_blank">Download Attachment</a>
           <% } %>
         </div>
       <% } %>
+      
       <div class="mt-4 reveal">
         <h3 class="text-xl font-semibold mb-2">Tasks</h3>
         <ul class="list-disc pl-5">
