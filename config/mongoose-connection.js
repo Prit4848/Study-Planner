@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 // Connect to MongoDB
 mongoose
-  .connect(`${process.env.Mongodb_uri}/webapp`)
+  .connect(`${process.env.Mongodb_uri}/WEBAPP`)
   .then(() => {
     dbgr("Connected to MongoDB");
   })
