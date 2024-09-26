@@ -1,5 +1,4 @@
 
-const config = require("config")
 const dbgr = require("debug")("development:mongoose")
 
 
@@ -7,7 +6,7 @@ const mongoose = require("mongoose");
 
 // Connect to MongoDB
 mongoose
-  .connect(`${config.get("MONGODB_URI")}/webapp`)
+  .connect(`${process.env.Mongodb_uri}/webapp`)
   .then(() => {
     dbgr("Connected to MongoDB");
   })
